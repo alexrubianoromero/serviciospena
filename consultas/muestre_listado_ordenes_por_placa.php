@@ -18,7 +18,7 @@ session_start();
 include('../colocar_links2.php');
 include('../valotablapc.php');
 
-$sql_listado_ordenes = "select id,fecha,orden,estado,kilometraje,kilometraje_cambio,anulado from $tabla14 where placa = '".$_REQUEST['placa123']."' and id_empresa = '".$_SESSION['id_empresa']."' order by id desc ";
+$sql_listado_ordenes = "select id,fecha,orden,estado,kilometraje,kilometraje_cambio,anulado from $tabla14 where placa = '".$_REQUEST['placa123']."'  order by id desc ";
 
 $traer_vencimientos  = "select vencisoat,revision,chasis,motor    from  $tabla4   where placa = '".$_REQUEST['placa123']."' ";
 //echo '<br>'.$traer_vencimientos;
