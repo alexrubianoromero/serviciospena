@@ -40,7 +40,7 @@ include('mostrar_items_factura_inventario.php');
 
 
 ////////////////traer el numero del id de item_facturas_inventario
-$sql_maximo_id_item = "select max(id_item) as maximo from $tablaitemfacinv  where id_empresa = '".$_SESSION['id_empresa']."'  ";
+$sql_maximo_id_item = "select max(id_item) as maximo from $tablaitemfacinv  where 1=1   ";
 $consulta_maximo = mysql_query($sql_maximo_id_item,$conexion);
 $arreglo_maximo = mysql_fetch_assoc($consulta_maximo);
 $maximo = $arreglo_maximo['maximo'];

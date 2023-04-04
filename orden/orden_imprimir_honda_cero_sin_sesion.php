@@ -85,8 +85,10 @@ else {
 <br>
 <table width="<?php echo $ancho_tabla; ?>" border="0">
   <tr>
-    <td width="17%"><img src="../logos/motoracing.png" width="210" height="168"></td>
-    <td width="46%"><div align="center"><img src="../imagenes/honda_orden/todosjuntos.jpg" width="422" height="137"></div></td>
+    <td width="17%"><img src="../logos/motoracing.png" width="140" ></td>
+    <td width="46%">
+
+	</td>
     <td width="37%"><div id="Layer2">
       <table width="64%" height="90" border="1">
         <tr>

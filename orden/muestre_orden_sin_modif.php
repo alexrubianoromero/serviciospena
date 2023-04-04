@@ -51,11 +51,15 @@ include('../colocar_links2.php');
 echo '<table border= "1">';
 	echo '<tr>';
 
-	echo '<td><h3>No Orden<h3></td><td><h3>Imagenes</h3></td><td><h3>Estado</h3></td><td><h3>Linea</h3></td><td><h3>Fecha</h3></td><td><h3>Placa</h3></td>';
+	echo '<td><h3>No Orden<h3></td>';
+	// echo '<td><h3>Imagenes</h3></td>';
+	echo '<td><h3>Estado</h3></td><td><h3>Linea</h3></td><td><h3>Fecha</h3></td><td><h3>Placa</h3></td>';
 	echo '<td><h3>Tecnico</h3></td>	';
-	echo '<td><h3>Total<br>Saldo<br>Abonos<br>Cliente</h3></td>	';
-	echo '<td><h3>Prestamos<BR>Internos</h3></td>	';
-	echo'<td><h3>Pagos<BR>Tecnico</h3></td>';
+
+	// echo '<td><h3>Total<br>Saldo<br>Abonos<br>Cliente</h3></td>	';
+	// echo '<td><h3>Prestamos<BR>Internos</h3></td>	';
+	// echo'<td><h3>Pagos<BR>Tecnico</h3></td>';
+
 
 	if($_SESSION['nivel_perfil'] > 2)
 	{ 
@@ -99,26 +103,26 @@ echo '<table border= "1">';
 				if($ordenes[8] == 1){ echo '<tr class="fila_azul">'; }
 				
 				echo '<td><h3>'.$ordenes['4'].'</h3></td>';
-					echo  '<td><h3>';
-				echo '<a href="../imagenes_modulo/muestre_imagenes_orden.php?idorden='.$ordenes['0'].'&placamasorden='.$placa_mas_idorden.'">Imagenes</a>';
-				echo '</h3></td>';
+				// 	echo  '<td><h3>';
+				//  echo '<a href="../imagenes_modulo/muestre_imagenes_orden.php?idorden='.$ordenes['0'].'&placamasorden='.$placa_mas_idorden.'">Imagenes</a>';
+				// echo '</h3></td>';
 				echo '<td><h3>'.$nombre_estado.'</h3></td><td><h3>'.$linea_tipo.'</h3></td><td><h3>'.$ordenes['1'].'</h3></td><td><h3>'.$ordenes['2'].'</h3></td><td><h3>'.$nombre_mecanico.'</h3></td>';
 				
 
 				
-				 echo '<td><h3>'; 
-				 ////////aquidebe ir el total de la orden 
-				echo number_format($arr_suma_items['suma_items'], 0, ',', '.').'<br><br>';
-				////////luego el saldo
-				echo number_format($saldo_orden, 0, ',', '.').'<br><br>';
+				//  echo '<td><h3>'; 
+				//  ////////aquidebe ir el total de la orden 
+				// echo number_format($arr_suma_items['suma_items'], 0, ',', '.').'<br><br>';
+				// ////////luego el saldo
+				// echo number_format($saldo_orden, 0, ',', '.').'<br><br>';
 
-				 echo '<a href="../caja/captura_recibos_de_caja.php?id_orden='.$ordenes['0'].'&tipo_recibo=1&abono=1&placa='.$ordenes['2'].'" >CREAR</a>';
-				 echo '</h3></td>';
+				//  echo '<a href="../caja/captura_recibos_de_caja.php?id_orden='.$ordenes['0'].'&tipo_recibo=1&abono=1&placa='.$ordenes['2'].'" >CREAR</a>';
+				//  echo '</h3></td>';
 				 
-				 echo '<td><h3>';
-				 echo '<a href= "../prestamos_internos/consultar_prestamos.php?idorden='.$ordenes['0'].'&placa='.$ordenes['2'].'&orden='.$ordenes['4'].'">Consultar</a>';
-				 echo '<br><br>';
-				 echo '<a href = "../prestamos_internos/capturar_prestamo.php?idorden_prestadora='.$ordenes['0'].'&orden='.$ordenes['4'].'&placa='.$ordenes['2'].'">Prestar_A</a>';
+				//  echo '<td><h3>';
+				//  echo '<a href= "../prestamos_internos/consultar_prestamos.php?idorden='.$ordenes['0'].'&placa='.$ordenes['2'].'&orden='.$ordenes['4'].'">Consultar</a>';
+				//  echo '<br><br>';
+				//  echo '<a href = "../prestamos_internos/capturar_prestamo.php?idorden_prestadora='.$ordenes['0'].'&orden='.$ordenes['4'].'&placa='.$ordenes['2'].'">Prestar_A</a>';
 				 
 
 				 ////revisar si tiene algun prestamo que le hallan hecho a la orden
@@ -136,9 +140,9 @@ echo '<table border= "1">';
 				}
 				 echo '</h3></td>';
 
-				echo  '<td><h3>';
-				echo '<a href=>Pagos</a>';
-				echo '</h3></td>';
+				// echo  '<td><h3>';
+				// echo '<a href=>Pagos</a>';
+				// echo '</h3></td>';
 
 				if($_SESSION['nivel_perfil'] >2)
 				{			
