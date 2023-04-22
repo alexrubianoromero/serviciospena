@@ -34,7 +34,7 @@ class ClientesModelo extends Conexion
 
         {
 
-              $sql = "SELECT * FROM cliente0 ORDER BY idcliente DESC ";
+              $sql = "SELECT * FROM cliente0 ORDER BY idcliente DESC limit 500";
 
               $consulta = mysql_query($sql,$conexion); 
 
