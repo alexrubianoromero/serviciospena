@@ -35,17 +35,14 @@ $prestamos_internos  = "prestamos_internos";
 $empresas_externas = "empresas_externas";
 /*valores para pc*/
 
-// $servidor = "localhost";
-// $usuario = "root";
-// $clave  = "peluche2016";
-// $nombrebase = "base_demo";
-
-
-
 $servidor = "localhost";
-$usuario = "ctwtvsxj_admin";
-$clave  = "ElMejorProgramador***";
-$nombrebase = "ctwtvsxj_base_serviciospena";
+$usuario = "root";
+$clave  = "peluche2016";
+$nombrebase = "base_demo";
+
+
+
+
 
 
 $conexion =mysql_connect($servidor,$usuario,$clave);

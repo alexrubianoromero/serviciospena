@@ -68,6 +68,7 @@ Class OrdenesModelo extends Conexion
                  WHERE  o.id = '".$id."'
                  ORDER BY  o.id DESC 
         ";
+        // echo '<br>'.$sql; 
         // $consulta = mysql_query($sql,$conexion);
         $consulta = mysql_query($sql,$this->connectMysql());  
         $arreglo= mysql_fetch_assoc($consulta);
@@ -212,24 +213,24 @@ Class OrdenesModelo extends Conexion
                 ";        
 
 
-        // die($sql); 
+        //  die($sql); 
         $consulta = mysql_query($sql,$this->connectMysql());  
+        $arreglo = $this->get_table_assoc($consulta);
+        // $arreglo= '';
         
-        $arreglo= '';
+        // $i=0;
         
-        $i=0;
-        
-        while($resul = mysql_fetch_assoc($consulta)){
-            $arreglo[$i]['id'] = $resul['id'];
-            $arreglo[$i]['orden'] = $resul['orden'];
-            $arreglo[$i]['fecha'] = $resul['fecha'];
-            $arreglo[$i]['placa'] = $resul['placa'];
-            $arreglo[$i]['tipo'] = $resul['tipo'];
-               $arreglo[$i]['estado'] = $resul['estado'];
-               $arreglo[$i]['kilometraje'] = $resul['kilometraje'];
-               $arreglo[$i]['observaciones'] = $resul['observaciones'];
-               $i++;
-            }
+        // while($resul = mysql_fetch_assoc($consulta)){
+        //     $arreglo[$i]['id'] = $resul['id'];
+        //     $arreglo[$i]['orden'] = $resul['orden'];
+        //     $arreglo[$i]['fecha'] = $resul['fecha'];
+        //     $arreglo[$i]['placa'] = $resul['placa'];
+        //     $arreglo[$i]['tipo'] = $resul['tipo'];
+        //        $arreglo[$i]['estado'] = $resul['estado'];
+        //        $arreglo[$i]['kilometraje'] = $resul['kilometraje'];
+        //        $arreglo[$i]['observaciones'] = $resul['observaciones'];
+        //        $i++;
+        //     }
             return $arreglo;
             
         }
@@ -238,6 +239,7 @@ Class OrdenesModelo extends Conexion
             $sql = "update ordenes set 
             estado = '".$request['idEstadoOrden']."'
             , observacionestecnico = '".$request['observacionestecnico']."'
+            , mecanico = '".$request['idMecanico']."'
             where id = '".$request['id']."'
             ";
             $consulta = mysql_query($sql,$this->connectMysql()); 
@@ -311,6 +313,15 @@ Class OrdenesModelo extends Conexion
         {
             $sql = "delete from recibos_de_caja where id_orden = '".$idOrden."' ";  
             $consulta = mysql_query($sql,$this->connectMysql()); 
+            
+        }
+        
+        public function traerImagenesOrdenId($idOrden)
+        {
+            $sql = "select * from imagenes_ordenes where idorden =  $idOrden  ";
+            $consulta = mysql_query($sql,$this->connectMysql()); 
+            $imagenes = $this->get_table_assoc($consulta);
+            return $imagenes;  
 
         }
 

@@ -4,7 +4,7 @@ $raiz = dirname(dirname(dirname(__file__)));
 require_once($raiz.'/conexion/Conexion.php');
 // require_once('../../valotablapc.php');  
 
-require_once('../funciones/funciones.class.php');
+require_once($raiz.'/funciones/funciones.class.php');
 
 class ClientesModelo extends Conexion 
 {
@@ -29,25 +29,17 @@ class ClientesModelo extends Conexion
             return  $infoCLiente;
           } 
           
-    
-        public function traerDatosCliente0($conexion)
-
-        {
-
-              $sql = "SELECT * FROM cliente0 ORDER BY idcliente DESC limit 500";
-
-              $consulta = mysql_query($sql,$conexion); 
-
+          
+          public function traerDatosCliente0($conexion="")
+          {
+            $sql = "SELECT * FROM cliente0 ORDER BY idcliente DESC ";
+            // $consulta = mysql_query($sql,$conexion); 
+            $consulta = mysql_query($sql,$this->connectMysql()); 
               $filas = mysql_num_rows($consulta);
-
               $datos = funciones::table_assoc($consulta);
-
               $resp['filas'] = $filas;
-
               $resp['datos'] = $datos;
-
               return $resp; 
-
         }
 
 
@@ -188,15 +180,15 @@ class ClientesModelo extends Conexion
 
 
 
-          public function buscarCliente0Id($conexion,$id){
+          public function buscarCliente0Id($conexion='',$id){
 
             $sql="select * from cliente0 where idcliente = '".$id."'  "; 
 
             // echo '<br>'.$sql;
 
             // die();
-
-            $consulta = mysql_query($sql,$conexion); 
+            $consulta = mysql_query($sql,$this->connectMysql()); 
+            // $consulta = mysql_query($sql,$conexion); 
 
             $filas = mysql_num_rows($consulta);
 
@@ -236,7 +228,7 @@ class ClientesModelo extends Conexion
             
   public function buscarClientePorNombre($nombre){
       
-      $sql="select * from cliente0 where nombre like '%".$nombre."%' order by idcliente desc "; 
+      $sql="select * from cliente0 where nombre like '%".$nombre."%'  "; 
               // echo '<br>'.$sql;
               // die();
       $consulta = mysql_query($sql,$this->connectMysql()); 
@@ -269,6 +261,14 @@ class ClientesModelo extends Conexion
     $respuesta['filas']= $filas;
     $respuesta['datos']=  $datos;  
     return $respuesta; 
+  }
+  public function filtrarPropietariosNombre($nombreCliente)
+  {
+      $sql = "select * from cliente0 where nombre like '%".$nombreCliente."%'     ";
+      // die($sql); 
+      $consulta = mysql_query($sql,$this->connectMysql()); 
+      $arreglo = $this->get_table_assoc($consulta); 
+      return $arreglo;
   }
 
 

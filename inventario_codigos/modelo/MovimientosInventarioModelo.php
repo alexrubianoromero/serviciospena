@@ -32,31 +32,45 @@
 
         public function registerMov($data)
         {
-            
             $conexion = $this->connectMysql();
+            
+            if($data['tipo']==6)
+            { 
+                $obseTipo= '';
+                $campo = 'id_factura_venta';
+            }        
+
             if($data['tipo']==4)
             { 
                 $obseTipo= '';
                 $campo = 'facturacompra';
             }        
-            if($data['tipo']==3)
+            
+            if($data['tipo']==5)
             { 
                 $obseTipo= '';
                 $campo = 'facturacompra';
             }        
 
+            if($data['tipo']==3)
+            { 
+                $obseTipo= '';
+                $campo = 'facturacompra';
+            }        
+            
             if($data['tipo']==1)
             { 
                 $obseTipo= 'Entrada Inventario';
                 $campo = 'facturacompra';}
-            if($data['tipo']==2){ 
-                $obseTipo = 'Salida  Inventario';
-                $campo = 'id_factura_venta';
-            }
-            
-            $observaciones = $obseTipo.': '.$data['observaciones'];
-
-
+                
+                if($data['tipo']==2){ 
+                    $obseTipo = 'Salida  Inventario';
+                    $campo = 'id_factura_venta';
+                }
+                
+                $observaciones = $obseTipo.': '.$data['observaciones'];
+                
+                
                 $sql = "insert into movimientos_inventario 
                 (fecha_movimiento,cantidad,tipo_movimiento,".$campo.",id_codigo_producto,observaciones)
                 values( now(), '".$data['cantidad']."','".$data['tipo']."'
@@ -64,9 +78,9 @@
                 ,'".$data['id']."'
                 ,'".$observaciones."'
                 ) "; 
-                // die($sql); 
+                //  die($sql); 
                 $consulta = mysql_query($sql,$conexion);  
-                echo '<br>Movimiento grabado';        
+                // echo '<br>Movimiento grabado';        
         }
         public function searchMovCode($idCode)
         {

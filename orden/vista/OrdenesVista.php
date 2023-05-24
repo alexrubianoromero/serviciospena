@@ -2,12 +2,18 @@
 $raiz = dirname(dirname(dirname(__file__)));
 require_once($raiz.'/vista/vista.php');
 require_once($raiz.'/orden/modelo/OrdenesModelo.class.php');
+require_once($raiz.'/tecnicos/modelo/TecnicosModelo.php');
 class OrdenesVista extends vista 
 {
     protected $modelOrden;
+    protected $tecnicosModelo;
+
     public function __construct()
     {
+        session_start();
         $this->modelOrden = new OrdenesModelo(); 
+        $this->tecnicosModelo = new TecnicosModelo();
+
     }
   
     public function pantallaInicial($arregloOrdenes){
@@ -66,7 +72,12 @@ class OrdenesVista extends vista
                <?php  $this->modalReciboCaja(); ?>
                <?php  $this->modalCaja(); ?>
                <?php  $this->modalReversionFacturada(); ?>
+               <?php  $this->modalAgregarItems(); ?>
+               <?php  $this->modalFiltrosCodigosNew(); ?>
+               <?php  $this-> modalImagenes(); ?>
 
+              
+              
 
            </body>
            </html>
@@ -124,6 +135,7 @@ class OrdenesVista extends vista
         echo '<thead>'; 
         echo '<tr  class="bontonesmenuinternos">'; 
         echo '<th>ORDEN</th>';
+        // echo '<th>IMA</th>';
         echo '<th>PDF</th>';
         echo '<th>FECHA</th>';
         echo '<th>PLACA</th>';
@@ -167,6 +179,14 @@ class OrdenesVista extends vista
  
             echo '<a href="../orden/pdf/ordenPdf3.php?idOrden='.$orden['id'].'" target="_blank">PDF</a>';
             echo '</td>';
+            // echo '<td>'; 
+            // echo '<button 
+            //         class="btn btn-default" 
+            //         onclick ="mostrarImagenesOrden('.$orden['id'].'); "
+            //         data-toggle="modal" data-target="#myModalImagenes"
+            //       >IMA</button>';
+            
+            // echo '</td>';
             echo '<td>'.$orden['fecha'].'</td>';
             echo '<td>'.$orden['placa'].'</td>';
             echo '<td>'.$orden['tipo'].'</td>';
@@ -267,17 +287,42 @@ class OrdenesVista extends vista
           </div>
         <?php
     }
+    public function modalImagenes()
+    {
+        ?>
+         <!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal2">
+         Launch demo modal
+         </button> -->
+          <div class="modal fade" id="myModalImagenes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title" id="myModalLabel">Imagenes Orden</h4>
+                  </div>
+                  <div id="cuerpoModalImagenes" class="modal-body">
+                      
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                      <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                  </div>
+                  </div>
+              </div>
+          </div>
+        <?php
+    }
     public function modalCaja (){
         ?>
          <!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal2">
          Launch demo modal
          </button> -->
-          <div class="modal fade" id="myModalCaja" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal fade" id="myModalCaja" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="color:black">
               <div class="modal-dialog" role="document">
                   <div class="modal-content">
                   <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                      <h4 class="modal-title" id="myModalLabel">Recibo de Caja</h4>
+                      <h4 class="modal-title" id="myModalLabel">Recibo de Caja Orden</h4>
                   </div>
                   <div id="cuerpoModalCaja" class="modal-body">
                       
@@ -341,6 +386,31 @@ class OrdenesVista extends vista
           </div>
         <?php
     }
+    public function modalFiltrosCodigosNew (){
+        ?>
+         <!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal2">
+         Launch demo modal
+         </button> -->
+          <div class="modal fade" id="myModalFiltrosCodigosNew" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title" id="myModalLabel">Filtros Codigos New</h4>
+                  </div>
+                  <div id="cuerpoModalFiltrosCodigosNew" class="modal-body">
+         
+                      
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                      <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                  </div>
+                  </div>
+              </div>
+          </div>
+        <?php
+    }
     public function modalClientes (){
         ?>
          <!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal2">
@@ -391,16 +461,47 @@ class OrdenesVista extends vista
           </div>
         <?php
     }
+    public function modalAgregarItems (){
+        ?>
+         <!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal2">
+         Launch demo modal
+         </button> -->
+          <div  class="modal fade" id="myModalAgregarItems" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                  <div class="modal-header" id="headerNuevaOrden">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title" id="myModalLabel">CREACION DE ORDEN </h4>
+                  </div>
+                  <div id="cuerpoModalAgregarItems" class="modal-body">
+                      
+                      
+                  </div>
+                  <div class="modal-footer" id="footerNuevoCliente">
+                      <button  type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                      <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                  </div>
+                  </div>
+              </div>
+          </div>
+        <?php
+    }
 
-    public function mostrarInfoOrden($arregloOrden,$conexion,$resultadoItems){
+    public function mostrarInfoOrden($arregloOrden,$conexion,$resultadoItems,$request){
         //  echo $arregloOrden['observaciones'];
         //  die();
-    //     echo '<pre>';
-    // print_r($arregloOrden);
-    // echo '</pre>';
-    // die();
+        // echo '<pre>';
+        // print_r($arregloOrden['id']);
+        // echo '</pre>';
+        $infoTecnico =   $this->tecnicosModelo->traerTecnicoAsignadoIdOrden($arregloOrden['id']); 
+        // echo '<pre>';
+        // print_r($tecnico);
+        // echo '</pre>';
+        // die();
         ?>
             <div id = "div_detalle_orden" >
+
+                    <input type="hidden" id = "nivel" value ="<?php echo $request['nivelStorage'];   ?>">
                     <input type="hidden" id = "idOrden" value ="<?php echo $arregloOrden['id'];   ?>">
                     <div id="div_info_moto">
                     </div>
@@ -425,7 +526,33 @@ class OrdenesVista extends vista
                              </tr>
                              <tr>
                                  <td>Mecanico</td>
-                                 <td><?php echo $arregloOrden['mecanico']; ?></td>
+                                 <td>
+                                    <?php
+                                    if($_SESSION['nivel']>2 ||  $request['nivelStorage']>2)
+                                    {
+                                        // echo $arregloOrden['idmecanico'];
+                                        $tecnicos=[];
+                                       $tecnicos = $this->tecnicosModelo->traerTecnicosNew();  
+                                       echo '<select class ="form-control" id = "idMecanicoAsignado" >';
+                                       foreach($tecnicos as $tecnico)
+                                       {
+                                           if($tecnico['idcliente'] == $arregloOrden['idmecanico'])
+                                           {
+
+                                               echo '<option selected value="'.$tecnico['idcliente'].'" >'.$tecnico['nombre'].'</option>'; 
+                                           }
+                                           else{
+                                               echo '<option value="'.$tecnico['idcliente'].'" >'.$tecnico['nombre'].'</option>'; 
+                                           }
+                                       }
+                                       echo '</select>';     
+                                    }
+                                    else{
+                                        echo '<input type = "hidden"  id="idMecanicoAsignado" value = "'.$infoTecnico['idcliente'].'"  >';
+                                        echo $arregloOrden['mecanico'];
+                                    }
+                                    ?>
+                                </td>
                              </tr>
                              <tr>
                                  <td colspan= "2" align="center">Observaciones</td>
@@ -488,10 +615,20 @@ class OrdenesVista extends vista
                                         <?php if($arregloOrden['estado']==1){ echo 'selected'; } ?>
                                         
                                         >Lista</option>
+                                        <?php 
+                                        if($_SESSION['nivel']>2 || $request['nivelStorage']>2)
+                                        {
+                                        ?>        
                                         <option value = "2"
-                                        <?php if($arregloOrden['estado']==2){ echo 'selected'; } ?>
-                                        
-                                        >Facturada</option>
+                                            <?php 
+                                                if($arregloOrden['estado']==2)
+                                                { echo 'selected'; } 
+                                            ?>
+                                        >Facturada
+                                        </option>
+                                        <?php
+                                        }
+                                        ?>
                                 
 
                                         <!-- <option value = "3"
@@ -530,10 +667,13 @@ class OrdenesVista extends vista
                 <br><br>
                     <div class="col-xs-12">
                        <?php 
-                        $boton = '<button ';
+                        $boton = '<button 
+                        data-toggle="modal" data-target="#myModalAgregarItems" ';
                         if($arregloOrden['estado']==2)
-                        { $boton .= ' disabled '; }      
-                        $boton .= 'class="btn btn-primary" onclick="pregunteItems();"
+                        { $boton .= ' disabled '; }     
+                         
+                            $boton .= 'class="btn btn-primary" onclick="pregunteItemsNew();"
+
                         >
                         Agregar Item</button>';
                         echo $boton;
@@ -548,7 +688,7 @@ class OrdenesVista extends vista
                     // echo $resultados['filas'] ;
                     // die();
                         if($resultadoItems['filas'] > 0){
-                            $this->mostrarItemsOrden($arregloOrden['id'],$resultadoItems['datos'],$arregloOrden['estado']);  
+                            $this->mostrarItemsOrden($arregloOrden['id'],$resultadoItems['datos'],$arregloOrden['estado'],$request);  
                         }
 
                     ?>
@@ -556,7 +696,7 @@ class OrdenesVista extends vista
         <?php
 
    }
-   public function mostrarItemsOrden($id,$items,$estadoOrden='10'){
+   public function mostrarItemsOrden($id,$items,$estadoOrden='10',$request = []){
     // $items =  $this->itemsOrden->traerItemsOrdenId( $id,$conexion);
    // echo '<pre>';
    // print_r($items);
@@ -568,6 +708,7 @@ class OrdenesVista extends vista
 
                <tr>
                    <td>Codigo</td>
+                   <td>Referencia</td>
                    <td>Descripcion</td>
                    <td>Vr.Unit</td>
                    <td>Cant.</td>
@@ -575,7 +716,7 @@ class OrdenesVista extends vista
                    <?php 
                        if($estadoOrden<2)
                        {
-                            if($_SESSION['nivel'] >2)
+                            if($_SESSION['nivel'] >2 || $request['nivelStorage'] > 2)
                             {
                                 echo '<td><i class="fas fa-trash"></i></td>';
                             }
@@ -590,6 +731,7 @@ class OrdenesVista extends vista
                {
                     echo '<tr>';
                     echo '<td>'.$items[$i]["codigo"].'</td>';
+                    echo '<td>'.$items[$i]["referencia"].'</td>';
                     echo '<td>'.$items[$i]["descripcion"].'</td>';
                     if($items[$i]["valor_unitario"] !=''){
                         echo '<td align="right">'.number_format($items[$i]["valor_unitario"], 0, ',', '.').'</td>';
@@ -609,7 +751,7 @@ class OrdenesVista extends vista
                     {
                             if($_SESSION['nivel'] >2)
                             {
-                                echo '<td>'.$_SESSION['nivel'].'<i class="fas fa-trash" onclick = "eliminarItemOrden('.$items[$i]["id_item"].');"></i></td>';
+                                echo '<td><i class="fas fa-trash" onclick = "eliminarItemOrden('.$items[$i]["id_item"].');"></i></td>';
                             }    
                     }
 
@@ -620,6 +762,7 @@ class OrdenesVista extends vista
                echo '<td></td>';
                echo '<td></td>';
                echo '<td align="right">Total</td>';
+               echo '<td></td>';
                echo '<td></td>';
                echo '<td align="right">'.number_format($sumaItems, 0, ',', '.').'</td>';
                echo '</tr>';
@@ -722,7 +865,8 @@ class OrdenesVista extends vista
 
       <?php
   }
-  public function pregunteNuevoItem($id){
+  public function pregunteNuevoItem($id)
+  {
     ?> 
     <div>
         <div class="row">
@@ -817,6 +961,117 @@ class OrdenesVista extends vista
     </div>
     <?php
   }
+  public function pregunteNuevoItemNew($id)
+  {
+    ?> 
+    <div  style="color:black">
+        <div class="row">
+            <div class="col-xs-2">
+            </div>   
+            <div class="col-xs-4">
+                <button  
+                onclick="filtroBuscarCodigoIngresoOrdenNew();"
+                class="btn btn-primary" 
+                data-toggle="modal" data-target="#myModalFiltrosCodigosNew"
+                >
+                <i class="fas fa-search" ></i> 
+                BUSCAR CODIGO
+            </button>
+            
+        </div>
+        <div class="col-xs-4">
+            <button
+            class="btn btn-primary" 
+                onclick= "cerrarventanaItems();"
+            >
+                CERRAR 
+            </button>
+        </div>    
+        <div class="col-xs-2">
+            </div>  
+
+
+        </div>
+        <br>
+        <input type = "hidden" value= "<?php echo $id ?>">
+        <div class="row form-group">
+            <div class="col-xs-3">
+                <label >Codigo:</label>
+            </div>
+            <div class="col-xs-7">
+                <!-- Codigo:<input type="text" id = "codNuevoItem" onblur="verifiqueCodigo();"> -->
+                <input class ="form-control" 
+                        type="text" 
+                        id = "codNuevoItem" 
+                        onkeyup="verificarSiExisteCodigo();"
+                >
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-xs-3">
+                <label >Referencia:</label>
+            </div>
+            <div class="col-xs-7">
+                <input class ="form-control" type="text" id = "referenciapan" >
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-xs-3">
+                <label >Descripcion:</label>
+            </div>
+            <div class="col-xs-7">
+                <input class ="form-control" type="text" id = "descripan" ">
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-xs-3">
+                <label > Valor Unit:</label>
+            </div>
+            <div class="col-xs-7">
+                <input class ="form-control" type="text" id = "valorUnitpan" ">
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-xs-3">
+                <label > Cantidad: <span id="existencias" style="color:green;"></span><input type ="hidden" id="inputexistencias"></label>
+            </div>
+            <div class="col-xs-7">
+
+                <input class ="form-control" 
+                    type="text" 
+                    id = "cantipan" 
+                    onkeyup="generarTotalItem();"
+                >
+            </div>
+        </div>
+    
+        <div class="row form-group">
+            <div class="col-xs-3">
+                <label > Total:</label>
+            </div>
+            <div class="col-xs-7">
+                <input class ="form-control" type="text" id = "totalItem" onfocus="blur();" >
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-xs-6">
+                <button class="btn btn-primary"  
+                        data-dismiss="modal"
+                        onclick="cerrarVentanaNuevoItem();"
+                >Cancelar</button>
+            </div>
+            <div class="col-xs-6">
+                <button class="btn btn-primary" 
+                        id = "grabarNuevoItem" 
+                        data-dismiss="modal"
+                        onclick="grabarNuevoItemNew(<?php echo $id ?>);"
+                >Grabar Item</button>
+            </div>
+        </div>
+    </div>
+    <?php
+  }
 
   public function formuFiltrosOrdenes()
   {
@@ -868,7 +1123,11 @@ class OrdenesVista extends vista
                                 <option value = "">Seleccione...</option>
                                 <option value = "0">En Proceso</option>
                                 <option value = "1">Lista</option>
-                                <option value = "2">Facturada</option>
+                             <?php   
+                              if($_SESSION['nivel']>2){
+                                  echo '<option value = "2">Facturada</option>';
+                              }
+                            ?>    
                                 <!-- <option value = "3">Entregada</option> -->
                             </select>
                     </div>        
@@ -939,6 +1198,7 @@ class OrdenesVista extends vista
         echo '<tr>';
         echo '<th>Codigo</th>';
         echo '<th>Referencia</th>';
+        echo '<th>Descripcion</th>';
         echo '<th>P.Venta</th>';
         echo '<th>Can/Mov</th>';
         // echo '<th>Descontar</th>';
@@ -954,7 +1214,8 @@ class OrdenesVista extends vista
                     >'.$codigo['codigo_producto'].
                     '</button></td>';
             echo '<td>'.$codigo['referencia'].'</td>';
-            echo '<td>'.number_format($codigo['valorventa'], 0, '.', '').'</td>';
+            echo '<td>'.$codigo['descripcion'].'</td>';
+            echo '<td>'.number_format($codigo['valorventa'],0,",",".").'</td>';
 
             echo '<td>'.$codigo['cantidad'].'</td>';
             // echo '<td><button id="btnRetirarExistencias" class="btn btn-info"><i class="fas fa-minus"></i></button></td>';
@@ -964,6 +1225,23 @@ class OrdenesVista extends vista
         echo '</div>';
     }
 
+    public function pantallaImagenes($idOrden,$imagenes = [])
+    {
+        ?>
+        <div id="div_principal_imagenes">
+            <div id="div_nueva_imagen">
+                <form action="subearchivo.php" method="post" enctype="multipart/form-data">
+                    <input name="imagen" id="imagen" type="file">
+                    <br><br><br><br>
+                        <input type="submit" value="Enviar">
+                </form>
+            </div>
+            <div id="muestre_imagenes">
+
+            </div>
+        </div>
+        <?php
+    }
 
 
 }

@@ -9,6 +9,7 @@ require_once($raiz.'/orden/modelo/itemsOrdenModelo.php');
 
 class cajaController
 {
+    
     protected $vista;
     protected $model;
     protected $modelConcepto;  

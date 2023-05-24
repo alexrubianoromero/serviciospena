@@ -37,10 +37,8 @@ $sql_muestre_codigos .= " and  linea like '%".$_REQUEST['linea']."%' ";
 }
 
 
-
-
-
-$sql_muestre_codigos .= "order by descripcion ";
+// $sql_muestre_codigos .= "order by descripcion ";
+$sql_muestre_codigos .= "order by id_codigo desc ";
 
 
 //echo '<br>'.$sql_muestre_codigos;

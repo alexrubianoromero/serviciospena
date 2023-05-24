@@ -71,7 +71,7 @@ class ordenControlador
 
 
         if(isset($_REQUEST['id'])){
-            $this->mostrarInfoOrden($_REQUEST['id'],$conexion);
+            $this->mostrarInfoOrden($_REQUEST,$conexion);
         }
 
         if($_REQUEST['opcion']=='grabarOrden'){
@@ -92,6 +92,10 @@ class ordenControlador
         
         if($_REQUEST['opcion']=='pregunteNuevoItemOrden'){
             $this->pregunteNuevoItemOrden($_REQUEST['idOrden'],$conexion);
+        }
+        
+        if($_REQUEST['opcion']=='pregunteNuevoItemOrdenNew'){
+            $this->pregunteNuevoItemOrdenNew($_REQUEST['idOrden'],$conexion);
         }
         
         if($_REQUEST['opcion']=='grabarNuevoItemOrden'){
@@ -125,6 +129,10 @@ class ordenControlador
         if($_REQUEST['opcion']=='reversarFacturada'){
             $this->reversarFacturada($_REQUEST);
         }
+        if($_REQUEST['opcion']=='mostrarImagenesOrden'){
+            $this->mostrarImagenesOrden($_REQUEST);
+        }
+       
     }
 
 
@@ -173,15 +181,15 @@ class ordenControlador
         $this->vistaOrden->pantallaInicial($arregloOrdenes);
     }
 
-    public function mostrarInfoOrden($id,$conexion){
-        $arregloOrden = $this->modeloOrden->traerOrdenId($id,$conexion);
+    public function mostrarInfoOrden($request,$conexion){
+        $arregloOrden = $this->modeloOrden->traerOrdenId($request['id'],$conexion);
         // $items = self::traerItemsOrden($id,$conexion);  
-        $resultadoItems = $this->itemsOrdenModelo->traerItemsOrdenId($id);
+        $resultadoItems = $this->itemsOrdenModelo->traerItemsOrdenId($request['id']);
         // echo '<pre>';
         // print_r($arregloOrden);
         // echo '</pre>';
         // die();
-        $this->vistaOrden->mostrarInfoOrden($arregloOrden,$conexion,$resultadoItems);
+        $this->vistaOrden->mostrarInfoOrden($arregloOrden,$conexion,$resultadoItems,$request);
     }
 
 
@@ -273,6 +281,11 @@ class ordenControlador
         $this->vistaOrden->pregunteNuevoItem($id);
         
     }
+    public function pregunteNuevoItemOrdenNew($id){
+
+        $this->vistaOrden->pregunteNuevoItemNew($id);
+        
+    }
     
     public function grabarNuevoItemOrden($request){
         $this->itemsOrdenModelo->grabarNuevoItem($request);
@@ -300,7 +313,8 @@ class ordenControlador
     public function mostrarItemsOrden($request)
     {
         $resultadoItems = $this->itemsOrdenModelo->traerItemsOrdenId($request['idOrden']);
-        $this->vistaOrden->mostrarItemsOrden($request['idOrden'],$resultadoItems['datos']); 
+        $infoOrden = $this->modeloOrden->traerOrdenId($request['idOrden']);
+        $this->vistaOrden->mostrarItemsOrden($request['idOrden'],$resultadoItems['datos'],$infoOrden['estado'],$request); 
     }
     public function verificarSiexisteCodigo($request)
     {
@@ -332,7 +346,10 @@ class ordenControlador
         $data['factura'] = ''; 
         $data['id'] = $infoCodigo['id_codigo'];
         $data['observaciones'] = 'Entrada Anulacion Item de orden '.$infoOrden['orden']; 
+        //aqui viene el id del idItem
         $this->movimientosModelo->registerMov($data);
+        //aqui hay que enviarle el id pero de la orden
+        $request['idOrden'] = $infoItem['no_factura'];
         $this->mostrarItemsOrden($request);
     }
     public function formuFiltrosOrdenes()
@@ -355,13 +372,13 @@ class ordenControlador
         $ordenes = $this->modeloOrden->actualizarOrdenId($request);
         //crear el registro de facturada
         // $registro = $this->modeloOrden->crearRegistroFacturada($request);
-            
+        
     }
     public function formuFiltrosInventarioOrden()
     {
         $this->vistaOrden->formuFiltrosInventarioOrden();
     }
-
+    
     public function busqueCodigosConFiltroOrden($request)
     {
         $codigos = $this->codigosModelo->getInfoCodeFiltros($request);
@@ -373,7 +390,7 @@ class ordenControlador
         //comparar las fechas haber sin son del mismo dia 
         $fechapan =  time();
         $fechapan = date ( "Y/m/j" , $fechapan );
-
+        
         // echo '<br>'.$fechapan; 
         // echo '<br>'.$ultimoestadoFactu['fecha'];
         if($fechapan = $ultimoestadoFactu['fecha'])
@@ -388,6 +405,12 @@ class ordenControlador
         else {
             echo 'no se puede reversar , no es del mismo dia ';
         }
+    }
+    
+    public function  mostrarImagenesOrden($request)
+    {
+        $imagenes  = $this->modeloOrden->traerImagenesOrdenId($request['idOrden']);
+        $this->vistaOrden->pantallaImagenes($request['idOrden'],$imagenes); 
     }
 
 }

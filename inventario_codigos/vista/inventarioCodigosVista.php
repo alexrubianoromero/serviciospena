@@ -25,26 +25,29 @@ class inventarioCodigosVista extends vista
         <body class = "container" width ="95%">
             <div >
                 <div class="row">
-                    <div class="col-xs-4">
+                    <div class="col-xs-3">
                         <button 
                             data-toggle="modal" data-target="#myModalFiltroCodigos"
                             class = "btn btn-default"
                             onclick = "pregunteFiltrosCodigo()"
                         >Filtros</button>
                     </div>
-                    <div class="col-xs-4">
+                    <div class="col-xs-3">
                         <button 
                             data-toggle="modal" data-target="#myModalProducto" 
                             class="btn btn-primary" 
                             onclick="pregunteNuevoCodigo(); "
                         >NUEVO_COD</button>
                     </div>
-                    <div class="col-xs-4">
+                    <div class="col-xs-3">
                         <button 
                             data-toggle="modal" data-target="#myModalAlertas" 
                             class="btn btn-primary" 
                             onclick="verAlertasDeInventario(); "
                         >Alertas</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <a role="button" class ="btn btn-primary" href="../inventario_codigos/excel/generar_excel.php">Exportar Excel</a>
                     </div>
                 </div>
                 <div id = "divResultadosInventarios"> <?php $this->mostrarCodigos($codigos); ?></div>
@@ -68,6 +71,7 @@ class inventarioCodigosVista extends vista
         echo '<tr>';
         echo '<th>Codigo</th>';
         echo '<th>Referencia</th>';
+        echo '<th>Descripcion</th>';
         echo '<th>P.Venta</th>';
         echo '<th>Can/Mov</th>';
         echo '<th>Accion</th>';
@@ -79,7 +83,10 @@ class inventarioCodigosVista extends vista
             echo '<tr>'; 
             echo '<td align="right"><button onclick="mostrarInfoCodigo('.$codigo['id_codigo'].');" class="btn btn-primary" data-toggle="modal" data-target="#myModalClientes">'.$codigo['codigo_producto'].'</button></td>';
             echo '<td>'.$codigo['referencia'].'</td>';
-            echo '<td>'.number_format($codigo['valorventa'], 0, '.', '').'</td>';
+            echo '<td>'.$codigo['descripcion'].'</td>';
+
+
+            echo '<td>'.number_format($codigo['valorventa'], 0, ',', '.').'</td>';
 
             echo '<td><button class="btn btn-default" onclick ="verMovimientosPrueba('.$codigo['id_codigo'].');" data-toggle="modal" data-target="#myModalMovimientos" >'.$codigo['cantidad'].'</button></td>';
             echo '<td><button onclick = "aumentarInventario('.$codigo['id_codigo'].'); "  data-toggle="modal" data-target="#myModalAumentarProducto" id="btnAdicionarExistencias" class="btn btn-primary"><i class="fas fa-plus"></i></button>';
@@ -506,30 +513,35 @@ class inventarioCodigosVista extends vista
                         <input class="form-control"  id = "factura">
                     </div>
                 </div>
-                <div class="row ">
+
+                <div class="row " style="background-color: gray;">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label>Cantidad</label>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                        <input class="form-control"  id = "cantidad">
+                        <input autofocus  class="form-control"  id = "cantidad">
+                        <br><br>
                     </div>
                 </div>
+
                 <div class="row ">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label>Observaciones</label>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                        <textarea class ="form-control" id="observaciones" cols="20" rows="3"></textarea>
+                        <textarea class ="form-control" id="observaciones" cols="20" rows="1"></textarea>
                     </div>
                 </div>
-
+                            
 
                     <br><br>
                     <button class="btn btn-primary" onclick="grabarEntradaSalidaInventario(<?php  echo $infoCode['id_codigo']; ?>);">Grabar Movimiento</button>
 
             <!-- </form> -->
          </div>   
-
+         <script>
+            document.getElementById("cantidad").focus();
+         </script>                   
         <?php
     }
 
@@ -578,7 +590,41 @@ class inventarioCodigosVista extends vista
 
     public function mostrarAlertas($codigosAlertas)
     {
-        $this->draw_table($codigosAlertas);
+        // $this->draw_table($codigosAlertas);
+        ?>
+        <div>
+            <table class="table">
+            <tr>
+                <th>COD</th>
+                <th>REF</th>
+                <th>DESCRIPCION</th>
+                <th>PROD_MIN</th>
+                <th>CANT.</th>
+
+            </tr>
+            <?php
+            foreach($codigosAlertas as $codigoAlerta)
+            {
+                if($codigoAlerta['cantidad']< $codigoAlerta['producto_minimo'] )
+                {
+                    echo '<tr>'; 
+                    echo '<td>'.$codigoAlerta['codigo_producto'].'</td>';
+                    echo '<td>'.$codigoAlerta['referencia'].'</td>';
+                    echo '<td>'.$codigoAlerta['descripcion'].'</td>';
+                    echo '<td align="center">'.$codigoAlerta['producto_minimo'].'</td>';
+                    echo '<td>'.$codigoAlerta['cantidad'].'</td>';
+                    echo '</tr>';
+                }
+            }
+        echo '</table>';    
+        echo '</div>';
+    }
+    public function generarExcelInventario($codigos)
+    {
+        $filename = "inventario.xls";
+        header("Content-Type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment; filename=".$filename);
+        $this->mostrarCodigos($codigos);
     }
 }
 

@@ -18,6 +18,15 @@ require_once($raiz.'/conexion/Conexion.php');
         }
 
 
+       public function traerCodigos()
+        {
+            $sql = "select * from productos order by id_codigo ";
+            $consulta = mysql_query($sql,$this->connectMysql());
+            $arrCodigo = $this->get_table_assoc($consulta);
+            return $arrCodigo;
+        }
+
+
         public function traerIdCodeConCode($code)
         {
             $sql ="select id_codigo from productos   where codigo_producto = '".$code."'  ";
@@ -49,7 +58,7 @@ require_once($raiz.'/conexion/Conexion.php');
 
         public function mostrarCodigosInventarios(){
             $conexion = $this->connectMysql();
-            $sql = "select * from productos order by id_codigo desc ";
+            $sql = "select * from productos order by id_codigo asc ";
             $consulta = mysql_query($sql,$conexion);
             return $consulta; 
         } 
@@ -113,40 +122,52 @@ require_once($raiz.'/conexion/Conexion.php');
 
         public function saveMoreLessInvent($request)
         {
-            //1 y 3 son entradas y suma al inventario 
+        //             echo '<pre>'; 
+        // print_r($request);
+        // echo '</pre>';
+        // die();
+        //     die('buenas ');
+            //En el request deben llegar tres parametros 
+            //id  el id del codigo 
+            //tipo  es la razon de la entrada o el descuento si es por aplicar el codigo a una orden o por venta o por simple cuadre
+            //cantidad la cantidad que se va a 
+            //1 , 3 y 5 son entradas y suma al inventario 
             //1 es entrada de inventario realizada desde el modulo de inventario osea suma al inventario
             //3 es es la eliminacion del un item del inventario osea se suma al inventario porque vuelve 
-            //2 y 4 son salidas y resta al inventario 
+            //5 es la reversion de una venta de mostrador
+            //2,4 y 6  son salidas y resta al inventario 
             //2 es una salida de inventario desde el modulo de inventarios osea resta del inventario
             //4 es un item agregado a una orden osea resta del inventario
+            //6 es una venta de mostrador debe restar
 
             $infoCode = $this->getInfoCodeById($request['id']);
             $conexion = $this->connectMysql();
             $infoActual = $this->getInfoCodeById($request['id']);
-            if($request['tipo']==1 || $request['tipo']==3 ) //lo que suma al inventario
+            if($request['tipo']==1 || $request['tipo']==3 || $request['tipo']==5 ) //lo que suma al inventario
             {
                 $saldo = $infoActual['cantidad'] +  $request['cantidad'];
             }
-            if($request['tipo']==2 || $request['tipo']==4 ) //lo que resta al inventario 
+            if($request['tipo']==2 || $request['tipo']==4 || $request['tipo']==6  ) //lo que resta al inventario 
             {
                 $saldo = $infoActual['cantidad'] -  $request['cantidad'];
             }
 
             $sql = "update productos set cantidad = '".$saldo ."' 
             where id_codigo = '".$request['id']."'   "; 
-            // die($sql);
+            //    die($sql);
     
-            $consulta = mysql_query($sql,$conexion);   
+            $consulta = mysql_query($sql,$this->connectMysql());   
 
-            echo 'Saldo actualizado !!!!'; 
+            // echo 'Saldo actualizado !!!!'; 
         }
 
         function codigosConAlertaInventario()
         {
-            $sql = "select codigo_producto as COD,referencia as REF, cantidad as CANT from productos 
+            //traer todos los codigos y mas bien los controlo desde la vista 
+            $sql = "select * 
+            from productos 
             where 1=1 
-            and alerta = 'SI'
-            and cantidad = producto_minimo";
+            and alerta = 'SI'";
             $consulta = mysql_query($sql,$this->connectMysql()); 
             $codigosAlerta = $this->get_table_assoc($consulta); 
             // echo 'desde el modelo<pre>'; 

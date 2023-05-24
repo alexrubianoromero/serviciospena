@@ -141,6 +141,8 @@ function validacionesOrden(){
 
 function muestreDetalleOrden(id){
     var id = id;
+    var nivelStorage = sessionStorage.nivel;
+    // alert(nivelSessionStorage)
     const http=new XMLHttpRequest();
     const url = '../orden/ordenes.php';
     http.onreadystatechange = function(){
@@ -157,9 +159,14 @@ function muestreDetalleOrden(id){
     http.open("POST",url);
     http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     http.send('consultarOrden=1'
-        +'&id='+id);
+        +'&id='+id
+        +'&nivelStorage='+nivelStorage
+        );
 
 }
+
+
+
 function crearVehiculo(){
     placa = document.querySelector('#placa').value;
     const http=new XMLHttpRequest();
@@ -401,6 +408,8 @@ function grabarVehiculoDesdeOrden()
      //debe ir a validar placa o algo asi 
      
     }
+
+
     function pregunteItems(){
     //    alert('digfame el item ');
        //muestre ventana apara introducir nuevo item 
@@ -420,6 +429,29 @@ function grabarVehiculoDesdeOrden()
         + "&idOrden="+idOrden
         );
     }
+
+    function pregunteItemsNew(){
+    //    alert('digfame el item ');
+       //muestre ventana apara introducir nuevo item 
+       var idOrden =  document.getElementById("idOrden").value;
+       const http=new XMLHttpRequest();
+       const url = '../orden/ordenes.php';
+       http.onreadystatechange = function(){
+           if(this.readyState == 4 && this.status ==200){
+               document.getElementById("cuerpoModalAgregarItems").innerHTML = this.responseText;
+            }
+        };
+        
+        http.open("POST",url);
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.send("opcion=pregunteNuevoItemOrdenNew"
+        + "&idOrden="+idOrden
+        );
+    }
+
+
+
+
     function mostrarItemsOrden(id){
         //    alert('digfame el item ');
         //muestre ventana apara introducir nuevo item 
@@ -478,6 +510,45 @@ function grabarVehiculoDesdeOrden()
                 );
             }        
         }
+        function grabarNuevoItemNew(idOrden)
+        {
+            $valida =  validacionCamposItem();
+            if($valida)
+            { 
+                // alert('agregart item');
+                //falta hacer el desarrollo
+                var codigo = document.getElementById("codNuevoItem").value;
+                var descripcion = document.getElementById("descripan").value;
+                var valorUnit = document.getElementById("valorUnitpan").value;
+                var cantidad = document.getElementById("cantipan").value;
+                var total = document.getElementById("totalItem").value;
+                var nivelStorage = sessionStorage.nivel;
+                
+                const http=new XMLHttpRequest();
+                const url = '../orden/ordenes.php';
+                http.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status ==200){
+                        document.getElementById("divPregunteNuevoItem").innerHTML = '';
+                        document.getElementById("div_items_orden").innerHTML = this.responseText;
+                        //cerrar ventanas 
+                        //para que deje ver la edicion de orden con sus datos
+                    }
+                };
+                
+                http.open("POST",url);
+                http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                http.send("opcion=grabarNuevoItemOrden"
+                + "&idOrden="+idOrden
+                + "&codigo="+codigo
+                + "&descripcion="+descripcion
+                + "&valorUnit="+valorUnit
+                + "&cantidad="+cantidad
+                + "&total="+total
+                + "&nivelStorage="+nivelStorage
+
+                );
+            }        
+        }
         
         function validacionCamposItem()
         {
@@ -511,12 +582,17 @@ function grabarVehiculoDesdeOrden()
                     alert('Por favor digitar total');
                     return 0;
                 }
-                
+                //aqui se deberia incluir una validacion para revisar si el inventario no es inferior a lo que se esta vendiendo 
+
                 return 1;
                 
             }
             
-            
+    function validarCantVentaVsExistencias()
+            {
+                var cantidadVenta = document.getElementById("cantipan").value;
+                
+            }
             function cerrarVentanaNuevoItem()
             {
                 document.getElementById("divPregunteNuevoItem").innerHTML = '';
@@ -538,6 +614,16 @@ function grabarVehiculoDesdeOrden()
                             document.getElementById("existencias").innerHTML = resp.data.cantidad;
                             document.getElementById("inputexistencias").value = resp.data.cantidad;
                             document.getElementById("valorUnitpan").value = resp.data.valorventa;
+                            document.getElementById("referenciapan").value = resp.data.referencia;
+                        }
+                        else{
+                            document.getElementById("descripan").value = '';
+                            document.getElementById("valorUnitpan").value = '';
+                            document.getElementById("existencias").innerHTML = '';
+                            document.getElementById("inputexistencias").value = '';
+                            document.getElementById("valorUnitpan").value = '';
+                            document.getElementById("referenciapan").value = '';
+
                         }
                     }
                 };
@@ -625,7 +711,9 @@ function actualizarInfoOrden(id)
 {
     // alert('buenas'+id);
     var idEstadoOrden =  document.getElementById("idEstadoOrden").value;
+    var idMecanico =  document.getElementById("idMecanicoAsignado").value;
     var observacionestecnico = document.getElementById("txtobservacionestecnico").value;
+    // alert (idMecanico);
     const http=new XMLHttpRequest();
     const url = '../orden/ordenes.php';
     http.onreadystatechange = function(){
@@ -640,6 +728,7 @@ function actualizarInfoOrden(id)
     + "&id="+id
     + "&idEstadoOrden="+idEstadoOrden
     + "&observacionestecnico="+observacionestecnico
+    + "&idMecanico="+idMecanico
     );
     pintarOrdenesNew();
 }
@@ -651,6 +740,22 @@ function filtroBuscarCodigoIngresoOrden()
     http.onreadystatechange = function(){
         if(this.readyState == 4 && this.status ==200){
             document.getElementById("cuerpoModalFiltrosCodigos").innerHTML = this.responseText;
+        }
+    };
+    
+    http.open("POST",url);
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.send("opcion=formuFiltrosInventarioOrden"
+    // + "&nombre="+nombre
+    );
+}
+function filtroBuscarCodigoIngresoOrdenNew()
+{
+    const http=new XMLHttpRequest();
+    const url = '../orden/ordenes.php';
+    http.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status ==200){
+            document.getElementById("cuerpoModalFiltrosCodigosNew").innerHTML = this.responseText;
         }
     };
     
@@ -698,6 +803,10 @@ function colocarInfoCodigoEnItem(idCod)
             document.getElementById("codNuevoItem").value = resp.codigo_producto;
             document.getElementById("descripan").value = resp.descripcion;
             document.getElementById("valorUnitpan").value = resp.valorventa;
+            document.getElementById("referenciapan").value = resp.referencia;
+            document.getElementById("referenciapan").value = resp.referencia;
+            document.getElementById("inputexistencias").value = resp.cantidad;
+            document.getElementById("existencias").innerHTML = resp.cantidad;
         }
     };
     
@@ -802,4 +911,27 @@ function cerraMymodalYpintarOrdenes()
     // $('#myModalReversionFacturada').modal('hide');  
     $('#myModal2').modal('hide');  
     pintarOrdenes();
+}
+
+function mostrarImagenesOrden(idOrden)
+{
+    const http=new XMLHttpRequest();
+    const url = '../orden/ordenes.php';
+    http.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status ==200){
+            var resp = JSON.parse(this.responseText);
+            // console.log(resp.descripcion); 
+            // alert(resp.descripcion); 
+            document.getElementById("cuerpoModalImagenes").innerHTML = this.responseText;
+            // document.getElementById("codNuevoItem").value = resp.codigo_producto;
+            // document.getElementById("descripan").value = resp.descripcion;
+            // document.getElementById("valorUnitpan").value = resp.valorventa;
+        }
+    };
+    
+    http.open("POST",url);
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.send("opcion=mostrarImagenesOrden"
+    + "&idOrden="+idOrden
+    );
 }

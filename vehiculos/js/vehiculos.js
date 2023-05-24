@@ -298,6 +298,24 @@ function verHistorialVehiculo(placa)
     + "&placa="+placa
     );
 }
+function muestreInfoVehiculo(placa)
+{
+    const http=new XMLHttpRequest();
+    const url = '../vehiculos/vehiculos.php';
+    http.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status ==200){
+            document.getElementById("cuerpoModalInfoVehiculo").innerHTML = this.responseText;
+        }
+    };
+    http.open("POST",url);
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.send("opcion=muestreInfoVehiculo"
+    + "&placa="+placa
+    );
+}
+
+
+
 
 function prueba(e)
 {
@@ -305,7 +323,7 @@ function prueba(e)
 }
 function muestreItemsOrden123(id)
 {
-     
+    
     // var placa = document.getElementById("histoPlaca").value 
     // alert('orden'+id);
     const http=new XMLHttpRequest();
@@ -322,3 +340,50 @@ function muestreItemsOrden123(id)
     );
 }
 
+function filtrarPropietariosNombre()
+{
+    // alert('filtro de propietarios');
+    var nombreCliente =  document.getElementById("nombrePropietarioAFiltrar").value;
+    const http=new XMLHttpRequest();
+    const url = '../clientes/clientesResponsivo.php';
+    http.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status ==200){
+            document.getElementById("selectPropietario").innerHTML = this.responseText;
+        }
+    };
+    http.open("POST",url);
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.send("opcion=filtrarPropietariosNombre"
+    + "&nombreCliente="+nombreCliente
+    );
+}
+
+function actualizarVehiculoNew()
+{
+    var idcarro =  document.getElementById("idcarro").value;
+    var placaAnterior =  document.getElementById("placaoripan").value;
+    var placaNueva =  document.getElementById("placapan").value;
+    var marca =  document.getElementById("marcapan").value;
+    var tipo =  document.getElementById("tipopan").value;
+    var modelo =  document.getElementById("modelopan").value;
+    const http=new XMLHttpRequest();
+    const url = '../vehiculos/vehiculos.php';
+    // alert('Anterior'+ placaAnterior + '  nueva '+ placaNueva )
+    http.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status ==200){
+            document.getElementById("cuerpoModalInfoVehiculo").innerHTML = this.responseText;
+        }
+    };
+    http.open("POST",url);
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.send("opcion=actualizarDatosVehiculoNew"
+    + "&idcarro="+idcarro
+    + "&placaAnterior="+placaAnterior
+    + "&placaNueva="+placaNueva
+    + "&marca="+marca
+    + "&tipo="+tipo
+    + "&modelo="+modelo
+    );
+
+
+}

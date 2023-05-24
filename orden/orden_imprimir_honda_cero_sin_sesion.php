@@ -85,10 +85,13 @@ else {
 <br>
 <table width="<?php echo $ancho_tabla; ?>" border="0">
   <tr>
-    <td width="17%"><img src="../logos/motoracing.png" width="140" ></td>
-    <td width="46%">
+    <td width="17%"><img src="../logos/motoracing.png" width="210" height="168"></td>
+    <td width="46%"><div align="center">
+	    <?php
+			// <img src="../imagenes/honda_orden/todosjuntos.jpg" width="422" height="137">
 
-	</td>
+		?>	
+	</div></td>
     <td width="37%"><div id="Layer2">
       <table width="64%" height="90" border="1">
         <tr>
@@ -133,7 +136,7 @@ else {
 </table>
 <table width="95%" border="1">
   <tr>
-    <td colspan="6"><div align="center">DATOS DE LA MOTOCICLETA </div></td>
+    <td colspan="6"><div align="center">DATOS DEL VEHICULO </div></td>
     </tr>
   <tr>
     <td width="12%">MARCA</td>

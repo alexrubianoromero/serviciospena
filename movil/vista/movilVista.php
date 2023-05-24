@@ -1,9 +1,16 @@
 <?php
+$raiz = dirname(dirname(dirname(__file__)));
+require_once($raiz.'/movil/model/UsuarioModel.php');
+require_once($raiz.'/movil/model/EmpresaModel.php');
 class movilVista{
-
+  private $empresaModel;   
   public function __construct()
   {
     session_start();
+    $this->empresaModel = new EmpresaModel(); 
+    // echo '<pre>';
+    // print_r($_SESSION);
+    // echo '</pre>';
   } 
   public function pantallaLogueo()
   {
@@ -30,11 +37,16 @@ class movilVista{
     </head>
     <body class="fondoPrograma">
         <div id="divTotal" align="center" class="container">
+            <input type="hidden" id="id_usuario" style="color:black">
+             <input type="hidden" id="usuario" style="color:black">
+            <input type="hidden" id="nivel"  style="color:black">
         <div id="imagenInicial" >
             <img class="imagenesinicio" src="imagen/logonuevo.png">
         </div>
         <p id="slogankaymo">TECNOLOGIA VERDADERA</p>
         <div id="divBotonesPrincipales">
+
+
             <button onclick="menuPrincipal();" class = "bontonesmenuinternos"> MENU PRINCIPAL
             <i class="fas fa-bars"></i>
         </button>
@@ -67,6 +79,8 @@ class movilVista{
     <script src="../tecnicos/js/tecnicos.js"></script>
     <script src="../ayudas_financieras/js/ayudasfinancieras.js"></script>
     <script src="../ayudas_financieras/js/conceptos.js"></script>
+    <script src="../ventas/js/ventas.js"></script>
+    <script src="../cambiosdeaceite/js/cambiosdeaceite.js"></script>
     <?php
   }
   public function htmlLogueo(){
@@ -81,11 +95,11 @@ class movilVista{
             <!-- <img src="planeta.png"> -->
             <div class="row" id="div_botones_inicio"> 
                 <div class = "form_group ">
-                    <input value="" type = "text" class = "form-control botoninicio " id="usuario" placeholder = "Usuario" > 
+                    <input value="" type = "text" class = "form-control botoninicio " id="txtUsuario" placeholder = "Usuario" > 
                 </div>
                 <br><br><br>
                 <div class = "form_group ">
-                    <input  value="" type = "password" class = "form-control botoninicio" id="clave" placeholder = "Clave"> 
+                    <input  value="" type = "password" class = "form-control botoninicio" id="txtClave" placeholder = "Clave"> 
                 </div>
                 <br><br><br><br>
                 <div class = "form_group ">
@@ -97,23 +111,55 @@ class movilVista{
         </div>   
         <?php
     }  
-    public function menuPrincipal()
+    public function menuPrincipal($request)
     {
+        // echo '<pre>'; 
+        // print_r($request['nivel']); 
+        // echo '</pre>';
+        // die(); 
         ?>
             <br><br>
             
-            <input type="hidden" id="usuario" value ="<?php  echo $_REQUEST['username']?>">
-            <input type="hidden" id="clave" value ="<?php  echo $_REQUEST['clave']?>">
+           
             <?php
-            if($_SESSION['nivel'] > 2)
+            //esta funcion me trae la info de empresa 
+            //con el campo recibe_tarjetas == 1 se mostrara el modulo de ventas 
+            $infoEmpresa = $this->empresaModel->traerInfoEmpresa();
+        //     echo '<pre>'; 
+        // print_r($infoEmpresa); 
+        // echo '</pre>';
+        // die(); 
+            if($_SESSION['nivel'] > 2 || $request['nivel']>2)
             {
-              echo   '<button class = "btn btn-primary bontonesmenu"  onclick="pantallaAyudasFinancieras();">AYUDAS FINANCIERAS 
-                    <i class="fas fa-list"></i>
-                </button>';
+                if($infoEmpresa['cambiosdeaceite']==1)
+                {
+                    echo   '<button class = "btn btn-primary bontonesmenu"  onclick="pantallaCambiosDeAceite();">CAMBIOS DE ACEITE
+                        
+                    </button>';
+                }
 
             }  
+            if($_SESSION['nivel'] > 2 || $request['nivel']>2)
+            {
+                if($infoEmpresa['recibe_tarjetas']==1)
+                {
+                    echo   '<button class = "btn btn-primary bontonesmenu"  onclick="pantallaVentas();">VENTAS
+                        <i class="fas fa-list"></i>
+                    </button>';
+                }
+
+            }  
+
             
-            if($_SESSION['nivel'] > 2)
+            if($_SESSION['nivel'] > 2 || $request['nivel']>2)
+            {
+              echo   '<button class = "btn btn-primary bontonesmenu"  onclick="pantallaAyudasFinancieras();">AYUDAS FINANCIERAS 
+              </button>';
+            //   <i class="fas fa-list"></i>
+              
+            }  
+            
+            if($_SESSION['nivel'] > 2 || $request['nivel']>2)
             {
                 echo '<br><br>';
                 echo '<button class = "btn btn-primary bontonesmenu"  onclick="pantallaClientes();">CLIENTES 
@@ -121,7 +167,7 @@ class movilVista{
                 </button>';
             }    
             
-            if($_SESSION['nivel'] > 2)
+            if($_SESSION['nivel'] > 2 || $request['nivel']>2)
             {
                 echo     '<br><br>';
              echo '<button class = "btn btn-primary bontonesmenu"  onclick="pantallaMotos();"><span align="left">MOTOS<span> 
@@ -135,7 +181,7 @@ class movilVista{
                     <!-- <i class="fas fa-boxes"></i> -->
                     <i class="fas fa-tools"></i>
                 </button>';
-                if($_SESSION['nivel'] > 2)
+                if($_SESSION['nivel'] > 2 || $request['nivel']>2 )
                 {
                 echo    '<br><br>';
              echo    '<button class = "btn btn-primary bontonesmenu"  onclick="pantallaInventario();">INVENTARIOS 
@@ -144,7 +190,7 @@ class movilVista{
             }
 
             
-            if($_SESSION['nivel'] > 2)
+            if($_SESSION['nivel'] > 2 || $request['nivel']>2)
             {
                  echo    '<br><br>';
                 echo     '<button class = "btn btn-primary bontonesmenu"  onclick="pantallaTecnicos();">TECNICOS
@@ -206,21 +252,20 @@ public function preguntarNuevaClave($request)
 </head>
 <body>
     <div style="color:black;">
-    <input type="hidden" id="input_id_usuario" value="<?php   echo $_SESSION['id_usuario'];  ?>">
+    <input type="hidden" id="input_id_usuario" value="<?php   echo $request['idUsuarioSessionStorage']  ?>">
+
     <div class ="form-group">
-        <div class="col-xs-3">
-            <label>Clave Anterior:</label>
-        </div>
-        <div class="col-xs-9">
-            <input type = "text" id="txtClaveAnterior" class="form-control">
+      
+        <div class="col-xs-12">
+            <input type = "text" id="txtClaveAnterior" class="form-control" placeholder="Clave Anterior">
         </div>
     </div>
+
+    <br><br>
     <div class ="form-group">
-        <div class="col-xs-3">
-            <label>Nueva Clave:</label>
-        </div>
-        <div class="col-xs-9">
-            <input type = "text" id="txtNuevaClave" class="form-control">
+ 
+        <div class="col-xs-12">
+            <input type = "text" id="txtNuevaClave" class="form-control" placeholder="Clave Actual">
         </div>
     </div>
     <button class="btn btn-primary" onclick="actualizarClave();">Actuallizar Clave</button>
