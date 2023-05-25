@@ -31,7 +31,9 @@ kilometraje,
 estado,
 mecanico,
 pagada,
-saldo
+saldo,
+nofacturatalonario,
+noordentalonario
  from $tabla14  where   1= 1 and tipo_orden < '2'   order by id desc";
 
 //echo '<br>'.$sql_muestre_ordenes.'<br>';
@@ -52,6 +54,8 @@ echo '<table border= "1">';
 	echo '<tr>';
 
 	echo '<td><h3>No Orden<h3></td>';
+	echo '<td><h3>Orden Interno<h3></td>';
+	echo '<td><h3>Factura Interna<h3></td>';
 	// echo '<td><h3>Imagenes</h3></td>';
 	echo '<td><h3>Estado</h3></td><td><h3>Linea</h3></td><td><h3>Fecha</h3></td><td><h3>Placa</h3></td>';
 	echo '<td><h3>Tecnico</h3></td>	';
@@ -103,6 +107,31 @@ echo '<table border= "1">';
 				if($ordenes[8] == 1){ echo '<tr class="fila_azul">'; }
 				
 				echo '<td><h3>'.$ordenes['4'].'</h3></td>';
+				echo '<td><h3>';
+				   if($ordenes['11']=='')
+					{
+						echo '<input type="text" id="noordentalonario_'.$ordenes['0'].'" size="4" Placeholder ="Orden">'; 
+						echo '<button
+								class="btn btn-primary" 
+							 	onclick="incluyanoordentalonario1('.$ordenes['0'].');" >Agregar</button>';
+					}else
+					{
+						echo $ordenes['11'];
+					} 
+					echo '</h3></td>';
+					echo '<td><h3>';
+					if($ordenes['10']=='')
+					 {
+						 echo '<input type="text" id="nofacturatalonario_'.$ordenes['0'].'" size="4" Placeholder ="Factura">'; 
+						 echo '<button onclick="incluyanofacturatalonario1('.$ordenes['0'].');" >Agregar</button>';
+					 }else
+					 {
+						 echo $ordenes['10'];
+					 } 
+					 echo '</h3></td>';
+
+
+
 				// 	echo  '<td><h3>';
 				//  echo '<a href="../imagenes_modulo/muestre_imagenes_orden.php?idorden='.$ordenes['0'].'&placamasorden='.$placa_mas_idorden.'">Imagenes</a>';
 				// echo '</h3></td>';
@@ -235,3 +264,45 @@ function buscar_mecanico($tabla21,$id_mecanico,$id_empresa,$conexion)
 <script src="../js/modernizr.js"></script>   
 <script src="../js/prefixfree.min.js"></script>
 <script src="../js/jquery-2.1.1.js"></script>   
+ 
+<script>
+	function incluyanoordentalonario1(idOrden) 
+	{
+    	// alert('click' + idOrden);
+		var numeroOrdenTalonario = 'noordentalonario_'+idOrden;
+		var noordentalonario = document.getElementById(numeroOrdenTalonario).value;
+		const http=new XMLHttpRequest();
+        const url = 'agregarordentalonario.php';
+        http.onreadystatechange = function(){
+            if(this.readyState == 4 && this.status ==200){
+                document.getElementById("contenidos").innerHTML = this.responseText;
+            }
+        };
+
+        http.open("POST",url);
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.send("id="+idOrden
+		+ "&noordentalonario="+noordentalonario
+        );
+	}
+	function incluyanofacturatalonario1(idOrden) 
+	{
+    	// alert('click' + idOrden);
+		var numeroFacturaTalonario = 'nofacturatalonario_'+idOrden;
+		var nofacturatalonario = document.getElementById(numeroFacturaTalonario).value;
+		const http=new XMLHttpRequest();
+        const url = 'agregarfacturatalonario.php';
+        http.onreadystatechange = function(){
+            if(this.readyState == 4 && this.status ==200){
+                document.getElementById("contenidos").innerHTML = this.responseText;
+            }
+        };
+
+        http.open("POST",url);
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.send("id="+idOrden
+		+ "&nofacturatalonario="+nofacturatalonario
+        );
+	}
+
+</script>
