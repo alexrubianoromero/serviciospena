@@ -178,7 +178,8 @@ Class OrdenesModelo extends Conexion
     public function traerEmailCLiente($placa,$conexion){
 
           $sql  = "SELECT  cli.email as email FROM  carros ca 
-                   INNER JOIN cliente0 cli ON  cli.idcliente = ca.propietario ";
+                   INNER JOIN cliente0 cli ON  cli.idcliente = ca.propietario 
+                   WHERE ca.placa = '".$placa."' ";
           $consulta = mysql_query($sql,$conexion);
           $arreglo = mysql_fetch_assoc($consulta);
           $email = $arreglo['email']; 

@@ -1,5 +1,7 @@
 <?php
 
+
+
 use PHPMailer\PHPMailer\PHPMailer;
 
 use PHPMailer\PHPMailer\Exception;
@@ -80,7 +82,7 @@ try {
 
     $mail->isHTML(true);                                  //Set email format to HTML
 
-    $mail->Subject = 'Bienvenido a SERVICIOS PENA';
+    $mail->Subject = 'Avance Reparacion SERVICIOS PENA';
 
     $mail->Body    = $body;
 

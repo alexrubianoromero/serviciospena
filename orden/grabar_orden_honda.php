@@ -263,7 +263,7 @@ $filas_ordenes_placa = mysql_num_rows($con_ordenes_Placa);
 
 if($filas_ordenes_placa  < 2)
 {
-      $body .='Te damos la bienvenida a KAYMO SOFTWARE <br>
+      $body .='Te damos la bienvenida a SERVICIOS PENA <br>
 De antemano queremos agradecer tu confianza en nosotros, <br> ';
 }
 else{
@@ -278,10 +278,10 @@ Placa: '.$_POST['placa'].' Orden No : '.$ordenpan.' <br>
 
 TRABAJO A REALIZAR : '.$_POST['descripcion'].' <br>
 
-TALLER DE MOTOS<br>
-Taller: KAYMO  <br>
-E-mail:  alexrubianoromero@gmail.com <br>
-Direccion:  Bogota '; 
+SERVICIOS PENA<br>
+Telefonos:   <br>
+E-mails:  serviciospena.sas@gmail.com ,serviciospena@hotmail.com<br>
+Direccion:  Cll 70C No 57-24 Bogota '; 
 
 /*
 $body="prueba envio correo11:24";
@@ -293,6 +293,7 @@ $cuerpo_correo="crecion de orden";
 /////////////////enviar el correo 
 //mail($_REQUEST['email'],'MOTORCYCLE ROOM',$body,$headers); 
 // include('enviar_correo.php');
+
 include('enviar_correo_phpmailer.php');
 
 if($_REQUEST['desdemovil'] == '1'){
