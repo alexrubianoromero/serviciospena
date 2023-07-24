@@ -124,6 +124,43 @@ class VehiculoVista extends vista
 
             <script src="../orden/js/orden.js"></script>
             <script src="../canbiosdeaceite/js/cambiosdeaceite.js"></script>
+            <script>
+            function filtrarPropietariosNombreDesdeVehiculo()
+                {
+                    // alert('filtro de propietarios vista');
+                     var nombreCliente =  document.getElementById("nombrePropietarioAFilraDesdeVehiculos").value;
+                    const http=new XMLHttpRequest();
+                    const url = '../clientes/clientesResponsivo.php';
+                    http.onreadystatechange = function(){
+                        if(this.readyState == 4 && this.status ==200){
+                            document.getElementById("selectPropietario").innerHTML = this.responseText;
+                        }
+                    };
+                    http.open("POST",url);
+                    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    http.send("opcion=filtrarPropietariosNombreDesdeVehiculo"
+                    + "&nombreCliente="+nombreCliente
+                    );
+                }
+
+                function filtrarPropietariosNombre()
+                    {
+                        // alert('filtro de propietarios');
+                        var nombreCliente =  document.getElementById("nombrePropietarioAFiltrar").value;
+                        const http=new XMLHttpRequest();
+                        const url = '../clientes/clientesResponsivo.php';
+                        http.onreadystatechange = function(){
+                            if(this.readyState == 4 && this.status ==200){
+                                document.getElementById("selectPropietario").innerHTML = this.responseText;
+                            }
+                        };
+                        http.open("POST",url);
+                        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        http.send("opcion=filtrarPropietariosNombre"
+                        + "&nombreCliente="+nombreCliente
+                        );
+                    }
+            </script>
 
         <?php        
 
@@ -659,7 +696,10 @@ class VehiculoVista extends vista
                         </td>
 
                     </tr>
-
+                    <tr>
+                        <td><label>Filtro_Nombre</label></td>
+                        <td><input type="text" id="nombrePropietarioAFilraDesdeVehiculos" class="form-control" onkeyup="filtrarPropietariosNombreDesdeVehiculo();"></td>
+                    </tr>
                     <tr>
 
                         <td><label>Propietario</label></td>

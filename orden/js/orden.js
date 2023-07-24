@@ -935,3 +935,5 @@ function mostrarImagenesOrden(idOrden)
     + "&idOrden="+idOrden
     );
 }
+
+

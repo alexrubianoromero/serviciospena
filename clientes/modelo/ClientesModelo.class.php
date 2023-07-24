@@ -262,6 +262,8 @@ class ClientesModelo extends Conexion
     $respuesta['datos']=  $datos;  
     return $respuesta; 
   }
+
+  
   public function filtrarPropietariosNombre($nombreCliente)
   {
       $sql = "select * from cliente0 where nombre like '%".$nombreCliente."%'     ";
@@ -270,6 +272,7 @@ class ClientesModelo extends Conexion
       $arreglo = $this->get_table_assoc($consulta); 
       return $arreglo;
     }
+    
     public function modificarClienteNew($request)
     {
       $sql = "update cliente0 set
