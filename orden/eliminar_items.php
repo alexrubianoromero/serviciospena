@@ -52,9 +52,9 @@ $sql_actualizar_inventario = "update $tabla12 set cantidad   =  '".$lo_que_queda
 where  codigo_producto = '".$cantidades['codigo']."'  and id_empresa = '".$_SESSION['id_empresa']."'  "; 
 $actualizar_inventario = mysql_query($sql_actualizar_inventario,$conexion);
 
-include('mostrar_items.php');
+include('mostrar_items_con_mecanico.php');
 //mostrar_items($cantidades['no_factura']);
-mostrar_items($factupan);
+mostrar_items_con_mecanico($factupan);
 ?>
 <script language="JavaScript" type="text/JavaScript">
             

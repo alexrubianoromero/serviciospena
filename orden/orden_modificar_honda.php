@@ -100,7 +100,10 @@ include('../valotablapc.php');
 
 include('../funciones.php'); 
 
-
+$raiz = dirname(dirname(__file__));
+// die($raiz);
+require_once($raiz.'/tecnicos/modelo/TecnicosModelo.php'); 
+$tecnicosModel = new TecnicosModelo();
 
 $sql_placas = "select placa from $tabla4 where 1=1";
 
@@ -590,6 +593,7 @@ REFERENCIA
     <td><div align="center">COD </div></td>
 
     <td><div align="center">DESCRIPCION</div></td>
+    <td><div align="center">TECNICO</div></td>
 
     <td><div align="center">COSTO</div></td>
 
@@ -618,6 +622,19 @@ REFERENCIA
     </label></td>
 
     <td width="149"><input type="text" name="descripan" id = "descripan" class= "fila_llenar" /> <div id = "descripcion"></div></td>
+    <td width="149">
+		<select id="idTecnico">
+			<option value="">Seleccione Tecnico...</option>
+			<?php
+				$tecnicos = $tecnicosModel->traerTecnicosNew();
+				foreach($tecnicos as $tecnico)
+				{
+					echo '<option value = "'.$tecnico['idcliente'].'">'.$tecnico['nombre'].'</option>';		
+				}
+			?>
+		</select>
+	</td>
+
 
      <td width="82"><input type="text" name="costo_producto" id = "costo_producto" size = "10" /></td>
 
@@ -651,11 +668,11 @@ REFERENCIA
 
 				 <?php 
 
-				  include('mostrar_items.php');
+				  include('mostrar_items_con_mecanico.php');
 
 				  $_SESSION['id_orden'] = $_REQUEST['idorden'];
 
-				  mostrar_items($_SESSION['id_orden']);
+				  mostrar_items_con_mecanico($_SESSION['id_orden']);
 
 				  //$factupan = $_GET['idorden'];
 
@@ -1162,6 +1179,7 @@ function busque_estado($tabla26,$id_estado,$id_empresa,$conexion)
 								data += '&id_mecanico=' + $("#id_mecanico").val();
 
 								data += '&orden_numero=' + $("#orden_numero").val();
+								data += '&idTecnico=' + $("#idTecnico").val();
 
 
 

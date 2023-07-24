@@ -29,7 +29,7 @@ $sql_grabar_item = "insert into $tabla15
 	porcentaje_mecanico,costo_producto,total_costo_producto,fecha)
 
 values ('".$_POST['orden_numero']."','".$_POST['codigopan_']."','".$_POST['descripan']."','".$_POST['cantipan']."',
-'".$total_item."','".$_POST['valor_unit']."','".$_SESSION['id_empresa']."','0','".$_POST['id_mecanico']."'
+'".$total_item."','".$_POST['valor_unit']."','".$_SESSION['id_empresa']."','0','".$_POST['idTecnico']."'
 ,'".$_POST['porcentaje_mecanico']."'
 ,'".$_POST['costo_producto']."'
 ,'".$total_costo_producto."'
@@ -44,8 +44,8 @@ $valor_final_inventario = $_POST['exispan']-$_POST['cantipan'];
 $sql_actualizar_inventario = "update $tabla12 set cantidad = '".$valor_final_inventario."'   
  where codigo_producto = '".$_POST['codigopan_']."'  and id_empresa = '".$_SESSION['id_empresa']."'  ";
 $actualizar_inventario = mysql_query($sql_actualizar_inventario,$conexion);  
-include('mostrar_items.php');
-mostrar_items($factupan);
+include('mostrar_items_con_mecanico.php');
+mostrar_items_con_mecanico($factupan);
 ?>
 <script language="JavaScript" type="text/JavaScript">
             
