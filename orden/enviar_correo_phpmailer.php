@@ -52,13 +52,13 @@ try {
 
     $mail->addAddress($_REQUEST['email']);     //Add a recipient
 
-    // $mail->addAddress('alexrubianoromero@hotmail.com');     //Add a recipient
+    //$mail->addAddress('alexrubianoromero@hotmail.com');     //Add a recipient
 
     // $mail->addAddress('ellen@example.com');               //Name is optional
 
     // $mail->addReplyTo('info@example.com', 'Information');
 
-    // $mail->addCC('cc@example.com');
+    $mail->addCC('serviciospena@hotmail.com');
 
     // if(!empty($data['emailCopia'])){
 

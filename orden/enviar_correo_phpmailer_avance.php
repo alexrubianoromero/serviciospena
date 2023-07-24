@@ -60,7 +60,7 @@ try {
 
     // $mail->addReplyTo('info@example.com', 'Information');
 
-    // $mail->addCC('cc@example.com');
+     $mail->addCC('serviciospena@hotmail.com');
 
     // if(!empty($data['emailCopia'])){
 

@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('../valotablapc.php');
-$sql_placas = "select idcarro,placa from $tabla4   where id_empresa = '".$_SESSION['id_empresa']."'  ";
+$sql_placas = "select idcarro,placa from $tabla4   where 1=1  limit 20";
 //echo '<br>'.$sql_placas.'<br>';
 $consulta_placas = mysql_query($sql_placas,$conexion);
 echo '<br>';

@@ -9,9 +9,8 @@ echo '<pre>';
 
 	
 $sql_cambio_placa = "update $tabla4 set placa = '".$_REQUEST['nueva_placa']."'  where idcarro = '".$_REQUEST['idcarro']."' "; 
-$sql_cambio_orden = "update $tabla14  set placa = '".$_REQUEST['nueva_placa']."'  where placa = '".$_REQUEST['placa_anterior']."'  
-and id_empresa = '".$_SESSION['id_empresa']."' "; 
-$sql_cambira_factura = "update $tabla11 set placa ='".$_REQUEST['nueva_placa']."'  where placa = '".$_REQUEST['placa_anterior']."'  and id_empresa = '".$_SESSION['id_empresa']."'";
+$sql_cambio_orden = "update $tabla14  set placa = '".$_REQUEST['nueva_placa']."'  where placa = '".$_REQUEST['placa_anterior']."' "; 
+$sql_cambira_factura = "update $tabla11 set placa ='".$_REQUEST['nueva_placa']."'  where placa = '".$_REQUEST['placa_anterior']."' ";
 
 /*
 echo '<br>'.$sql_cambio_placa;

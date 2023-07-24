@@ -16,7 +16,7 @@ from $tabla4 as car
 inner join $tabla3 as cli on (cli.idcliente = car.propietario)
 inner join $tabla14 as o  on (o.placa = car.placa)
 inner join $tabla10 as e on  (e.id_empresa = o.id_empresa) 
- where o.id = '".$_REQUEST['idorden']."' and e.id_empresa = '300' ";
+ where o.id = '".$_REQUEST['idorden']."'  ";
 //  echo '<br>'.$sql_placas.'<br>';
 $datos = mysql_query($sql_placas,$conexion);
 $filas = mysql_num_rows($datos); 
@@ -232,20 +232,23 @@ else {
 // esta funcion la utilizo cuando se va a facturar por esto ya tiene un formato predefinido para que cuadre al momento de mostrar la factura e imprimirla 
 function muestre_items_local_repuestos($orden,$tabla,$conexion,$id_empresa,$tabla12,$parametro)
 		{
+				
                 $subtotal = 0;
-				$sql_items_orden = "select * from  $tabla 
-                where no_factura = '".$orden."' 
-                and id_empresa = '300' 
-                and anulado < 1  ";  
-                if($parametro == 'R'){  
-                    $sql_items_orden .= " and codigo <> 'MO' ";
+				$sql_items_orden = "select i.cantidad,i.descripcion,i.valor_unitario,i.total_item
+				,p.nomina,i.codigo 
+				from  item_orden i
+				left outer  join productos p  on (p.codigo_producto = i.codigo) 
+                where i.no_factura  = '".$orden."' 
+                and i.anulado < 1  ";  
+                if($parametro =='R'){  
+					$sql_items_orden .= " and substring(i.codigo,1,2 )<> 'MO' ";
                 }
                 else {
-                    $sql_items_orden .= " and codigo = 'MO' ";
+					$sql_items_orden .= " and substring(i.codigo,1,2 ) = 'MO'";
                 }
-                $sql_items_orden .= " order by id_item ";
+                $sql_items_orden .= " order by i.id_item ";
                 //and codigo = '".$parametro."' 
-				// echo '<br>'.$sql_items_orden.'<br>';
+				//  echo '<br>'.$sql_items_orden.'<br>';
 				$consulta_items = mysql_query($sql_items_orden,$conexion);
 				$no_item = 0 ;
 				
@@ -256,7 +259,7 @@ function muestre_items_local_repuestos($orden,$tabla,$conexion,$id_empresa,$tabl
                         
                         '<tr>
                         <td >'.$items['cantidad'].'</td>
-                        <td  > '.$items['descripcion'].'</td>';
+                        <td  > '.$items['codigo'].'-'.$items['descripcion'].'</td>';
                         
                        echo ' <td align="right">'.number_format($items['valor_unitario'], 0, ',', '.').'</td>
                         <td align="right">'.number_format($items['total_item'], 0, ',', '.').'</td>
@@ -278,7 +281,7 @@ function suma_repuestos_items($orden,$tabla,$conexion,$id_empresa,$tabla12)
 				$valor_repuestos=0;
 				$valor_mano = 0;
 				//echo 'pasooooooooooooooooo3333333333333333333'.$orden;
-				$sql_items_orden = "select * from  $tabla where no_factura = '".$orden."' and id_empresa = '".$id_empresa."'  and anulado < 1 order by id_item ";
+				$sql_items_orden = "select * from  $tabla where no_factura = '".$orden."'   and anulado < 1 order by id_item ";
 				//echo '<br>'.$sql_items_orden.'<br>';
 				$consulta_items = mysql_query($sql_items_orden,$conexion);
 				$no_item = 0 ;
@@ -302,7 +305,7 @@ function suma_repuestos_items($orden,$tabla,$conexion,$id_empresa,$tabla12)
 				//<td width="34">'.$i.'</td>
 				$subtotal = $subtotal + $items['total_item'];
 				////////////////////averiguar si es codigo de nomina o no simplemente lo que no se a codigo de nomina es repuesto
-				$sql_confirmar_nomina = "select nomina from  $tabla12 where id_empresa = '".$id_empresa."'  and codigo_producto = '".$items['codigo']."'  and nomina = '1' ";
+				$sql_confirmar_nomina = "select nomina from  $tabla12 where 1=1 and codigo_producto = '".$items['codigo']."'  and nomina = '1' ";
 				$consulta_nomina = mysql_query($sql_confirmar_nomina,$conexion);
 				$filas_nomina = mysql_num_rows($consulta_nomina);
 					if($filas_nomina > 0)
@@ -327,7 +330,7 @@ function suma_manos_obra($orden,$tabla,$conexion,$id_empresa,$tabla12)
 				$valor_repuestos=0;
 				$valor_mano = 0;
 				//echo 'pasooooooooooooooooo3333333333333333333'.$orden;
-				$sql_items_orden = "select * from  $tabla where no_factura = '".$orden."' and id_empresa = '".$id_empresa."'  and anulado < 1 order by id_item ";
+				$sql_items_orden = "select * from  $tabla where no_factura = '".$orden."'   and anulado < 1 order by id_item ";
 				//echo '<br>'.$sql_items_orden.'<br>';
 				$consulta_items = mysql_query($sql_items_orden,$conexion);
 				$no_item = 0 ;
@@ -351,7 +354,7 @@ function suma_manos_obra($orden,$tabla,$conexion,$id_empresa,$tabla12)
 				//<td width="34">'.$i.'</td>
 				$subtotal = $subtotal + $items['total_item'];
 				////////////////////averiguar si es codigo de nomina o no simplemente lo que no se a codigo de nomina es repuesto
-				$sql_confirmar_nomina = "select nomina from  $tabla12 where id_empresa = '".$id_empresa."'  and codigo_producto = '".$items['codigo']."'  and nomina = '1' ";
+				$sql_confirmar_nomina = "select nomina from  $tabla12 where 1=1  and codigo_producto = '".$items['codigo']."'  and nomina = '1' ";
 				$consulta_nomina = mysql_query($sql_confirmar_nomina,$conexion);
 				$filas_nomina = mysql_num_rows($consulta_nomina);
 					if($filas_nomina > 0)
@@ -386,7 +389,7 @@ function traer_suma_iva_items_con_iva($orden,$tabla,$conexion,$id_empresa,$tabla
 				$valor_repuestos=0;
 				$valor_mano = 0;
 				//echo 'pasooooooooooooooooo3333333333333333333'.$orden;
-				$sql_items_orden = "select * from  $tabla where no_factura = '".$orden."' and id_empresa = '".$id_empresa."' and anulado < 1  order by id_item ";
+				$sql_items_orden = "select * from  $tabla where no_factura = '".$orden."'  and anulado < 1  order by id_item ";
 				//echo '<br>'.$sql_items_orden.'<br>';
 				$consulta_items = mysql_query($sql_items_orden,$conexion);
 				$no_item = 0 ;
