@@ -73,6 +73,7 @@ class CLientesVista extends vista
 
          <script src="../clientes/js/clientes.js"></script>
          <script src="../vehiculos/js/vehiculos.js"></script>
+         <script src="../clientes/js/clientes.js"></script>
 
      <?php           
 
@@ -150,6 +151,7 @@ class CLientesVista extends vista
              <?php  $this->modalClientesInfo(); ?>   
              <?php  $this->modalClientesHisto(); ?>   
              <?php  $this->modalClientesFiltro(); ?>   
+             <?php  $this->modalClientesModif(); ?>   
 
              
 
@@ -267,7 +269,29 @@ class CLientesVista extends vista
         <?php
     }
 
-
+    public function modalClientesModif (){
+        ?>
+         <!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal2">
+         Launch demo modal
+         </button> -->
+          <div  class="modal fade " id="myModalClientesModif" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                  <div class="modal-header" id="headerNuevoCliente">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title" id="myModalLabel">Informacion</h4>
+                  </div>
+                  <div id="cuerpoModalClientesModif" class="modal-body">
+                  </div>
+                  <div class="modal-footer" id="footerNuevoCliente">
+                      <button onclick="buscarClientePorNombre();" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                      <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                  </div>
+                  </div>
+              </div>
+          </div>
+        <?php
+    }
 
     public function verClientes($clientes){
         // echo '<pre>';
@@ -279,10 +303,13 @@ class CLientesVista extends vista
             <table class="table">
                 <thead>
                     <tr>
-                        <th>IDENTI</th>
-                        <th>NOMBRE</th>
-                        <th>TELEFONO</th>
+                        <th>Identi</th>
+                        <th>Nombre</th>
+                        <th>Telefono</th>
+                        <th>Email</th>
                         <th>WatsApp</th>
+                        <th>Modificar</th>
+
                         <!-- <th>DIRECCION</th>
                         <th>EMAIL</th> -->
                     </tr>
@@ -300,9 +327,16 @@ class CLientesVista extends vista
                             echo '</button></td>';
                             echo '<td>'.strtoupper($cli['nombre']).'</td>';
                             echo '<td>'.strtoupper($cli['telefono']).'</td>';
+                            echo '<td>'.$cli['email'].'</td>';
                             echo '<td><a href="https://web.whatsapp.com/" target="_blank"><img src="../logos/iconowatsapp.jpg" width="25px"></a></td>';
                             // echo '<td>'.strtoupper($vehi['direccion']).'</td>';
                             // echo '<td>'.$vehi['email'].'</td>';
+                            echo '<td><button  
+                            class="btn btn-primary"
+                            data-toggle="modal" data-target="#myModalClientesModif"  
+                            onclick="mostrarInfoCliente('.$cli['idcliente'].');">
+                            Modif
+                            </button></td>';
                             echo '</tr>';
                         }
                         ?>
@@ -609,6 +643,40 @@ class CLientesVista extends vista
           
         </div>
         <?php
+    }
+
+    public function mostrarInfoCLiente($cliente)
+    {
+        ?>
+
+            <div>
+                <input type="hidden" value="<?php echo $cliente['idcliente']  ?>">
+                <div class="row">
+                    <label for="">Identidad:</label>
+                    <input type="text" id="txtIdenti" value="<?php echo $cliente['identi']  ?>">
+                </div>
+                <div class="row">
+                    <label for="">Nombre:</label>
+                    <input type="text" id="txtNombre" value="<?php echo $cliente['nombre']  ?>">
+                </div>
+                <div class="row">
+                    <label for="">Direccion:</label>
+                    <input type="text" id="txtDireccion" value="<?php echo $cliente['direccion']  ?>">
+                </div>
+                <div class="row">
+                    <label for="">Telefono:</label>
+                    <input type="text" id="txtTelefono" value="<?php echo $cliente['telefono']  ?>">
+                </div>
+                <div class="row">
+                    <label for="">Email:</label>
+                    <input type="text" id="txtEmail" value="<?php echo $cliente['email']  ?>">
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-primary btn-block"   onclick="actualizarCliente(<?php   echo $cliente['idcliente']  ?>);">Actualizar Cliente</button>
+            </div>
+        <?php
+        
     }
 }
 

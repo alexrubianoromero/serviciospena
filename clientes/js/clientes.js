@@ -505,3 +505,55 @@ function buscarClientePorNombre()
                 + "&telefono="+telefono
                 );
             }
+
+
+
+function mostrarInfoCliente(id)
+{
+    const http=new XMLHttpRequest();
+    const url = '../clientes/clientesResponsivo.php';
+    http.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status ==200){
+            console.log(this.responseText);
+            document.getElementById("cuerpoModalClientesModif").innerHTML  = this.responseText;
+        }
+    };
+    http.open("POST",url);
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.send(
+        "opcion=mostrarInfoCLiente"
+        + "&id="+id
+        );
+    }
+    
+    
+    
+    function actualizarCliente(id)
+    {
+        // alert(id);
+        var identi =  document.getElementById("txtIdenti").value;
+        var nombre =  document.getElementById("txtNombre").value;
+        var direccion =  document.getElementById("txtDireccion").value;
+        var telefono =  document.getElementById("txtTelefono").value;
+        var email =  document.getElementById("txtEmail").value;
+    const http=new XMLHttpRequest();
+    const url = '../clientes/clientesResponsivo.php';
+    http.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status ==200){
+            console.log(this.responseText);
+            document.getElementById("cuerpoModalClientesModif").innerHTML  = this.responseText;
+        }
+    };
+    http.open("POST",url);
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.send(
+        "opcion=modificarClienteNew"
+        + "&id="+id
+        + "&identi="+identi
+        + "&nombre="+nombre
+        + "&direccion="+direccion
+        + "&telefono="+telefono
+        + "&email="+email
+        );
+}
+    

@@ -319,3 +319,4 @@ background-color: #c0c0c0;
 </html>
 
 <script src="menu.js"></script>  
+<script src="clientes/js/clientes.js"></script>  

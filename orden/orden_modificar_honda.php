@@ -576,9 +576,12 @@ REFERENCIA
 
       <tr>
 
-        <td colspan="11"><div align="center">PARTES Y RESPUESTOS </div></td>
-
-      </tr>
+        <td colspan="11"><div align="center" style="color:blue;">PARTES Y RESPUESTOS </div></td>
+		
+	</tr>
+      <tr>
+		  <td colspan="11"><div align="center" style="color:white;">las manos de obra se indican con el codigo MO </div></td>
+	</tr>
 
       <tr>
 

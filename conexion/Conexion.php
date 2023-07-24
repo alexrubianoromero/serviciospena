@@ -1,12 +1,16 @@
 <?php
 
 class Conexion{
-    private $host = "localhost";
-    private $user = "root";
-    private $password = "";
-    private $db = "motorcycleroom";
-    private $conect;
-
+    // private $host = "localhost";
+    // private $user = "root";
+    // private $password = "";
+    // private $db = "motorcycleroom";
+    // private $conect;
+    
+        private $host = "localhost";
+        private $user = "ctwtvsxj_admin";
+        private $password = "ElMejorProgramador***";
+        private $db = "ctwtvsxj_base_serviciospenapruebas";
         // private $conect;
 
     public function __construct(){

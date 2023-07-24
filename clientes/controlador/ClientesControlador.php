@@ -101,6 +101,14 @@ class ClientesControlador{
             if($_REQUEST['opcion']=='buscarPorFiltros'){
                 $this->buscarPorFiltros($_REQUEST);
             }
+            if($_REQUEST['opcion']=='mostrarInfoCLiente'){
+
+                $this->mostrarInfoCLiente($_REQUEST);
+            }
+            if($_REQUEST['opcion']=='modificarClienteNew'){
+                $this->modificarClienteNew($_REQUEST);
+            }
+
 
 
             
@@ -204,6 +212,20 @@ class ClientesControlador{
                     // die();
         $clientes = $this->modelo->buscarClientePorFiltros($request);
         $this->vista->verClientes($clientes);
+        
+    }
+    
+    public function mostrarInfoCLiente($request)
+    {
+
+        $cliente = $this->modelo->traerDatosClienteIdNew($request['id']);
+        // die('llego a controlador') ;
+            $this->vista->mostrarInfoCLiente($cliente);
+    }
+    public function modificarClienteNew($request)
+    {
+            $this->modelo->modificarClienteNew($request);
+            echo 'CLiente Actualizado'; 
 
     }
     

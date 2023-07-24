@@ -269,8 +269,19 @@ class ClientesModelo extends Conexion
       $consulta = mysql_query($sql,$this->connectMysql()); 
       $arreglo = $this->get_table_assoc($consulta); 
       return $arreglo;
+    }
+    public function modificarClienteNew($request)
+    {
+      $sql = "update cliente0 set
+      nombre = '".$request['nombre']."' 
+      ,identi = '".$request['identi']."' 
+      ,direccion = '".$request['direccion']."' 
+      ,telefono = '".$request['telefono']."' 
+      ,email = '".$request['email']."' 
+      where idcliente = '".$request['id']."'
+      ";
+      $consulta = mysql_query($sql,$this->connectMysql()); 
   }
-
 
 }
           
