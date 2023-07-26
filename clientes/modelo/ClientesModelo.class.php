@@ -272,7 +272,7 @@ class ClientesModelo extends Conexion
       $arreglo = $this->get_table_assoc($consulta); 
       return $arreglo;
     }
-    
+
     public function modificarClienteNew($request)
     {
       $sql = "update cliente0 set

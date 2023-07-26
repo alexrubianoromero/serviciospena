@@ -105,6 +105,10 @@ class ClientesControlador{
 
                 $this->mostrarInfoCLiente($_REQUEST);
             }
+            if($_REQUEST['opcion']=='modificarClienteNew'){
+
+                $this->modificarClienteNew($_REQUEST);
+            }
             if($_REQUEST['opcion']=='filtrarPropietariosNombreDesdeVehiculo'){
                 $this->filtrarPropietariosNombreDesdeVehiculo($_REQUEST);
             }
@@ -233,6 +237,7 @@ class ClientesControlador{
         public function filtrarPropietariosNombreDesdeVehiculo($request)
         {
            $clientes = $this->modelo->filtrarPropietariosNombre($request['nombreCliente']);
+           echo '<option value="">Seleccione..</option>';
            foreach($clientes as $cliente)
            {
                 echo '<option valus="'.$cliente['idcliente'].'">'.$cliente['nombre'].'</option>';
