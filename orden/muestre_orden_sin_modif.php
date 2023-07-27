@@ -33,7 +33,8 @@ mecanico,
 pagada,
 saldo,
 nofacturatalonario,
-noordentalonario
+noordentalonario,
+diagnostico
  from $tabla14  where   1= 1 and tipo_orden < '2'   order by id desc";
 
 //echo '<br>'.$sql_muestre_ordenes.'<br>';
@@ -105,6 +106,7 @@ echo '<table border= "1">';
 				if($ordenes[6] == 1){ echo '<tr class="fila_amarilla">'; }
 				if($ordenes[6] == 2){ echo '<tr class="fila_verde">'; }
 				if($ordenes[8] == 1){ echo '<tr class="fila_azul">'; }
+				if($ordenes[12] == 1){ echo '<tr class="fila_diagnostico">'; }
 				
 				echo '<td><h3>'.$ordenes['4'].'</h3></td>';
 				echo '<td><h3>';

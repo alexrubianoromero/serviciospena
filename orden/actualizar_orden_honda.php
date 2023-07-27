@@ -38,6 +38,7 @@ if ($_POST['cambiar_mecanico']== 'undefined'){$_POST['cambiar_mecanico'] = 0;}
 if ($_POST['checkbox_pagada']== 'undefined'){$_POST['checkbox_pagada'] = 0;}
 ////por si se desea enviar un nuevo correo con la descripcion de la orden 
 if ($_POST['enviar_correo']== 'undefined'){$_POST['enviar_correo'] = 0;}
+if ($_POST['diagnostico']== 'undefined'){$_POST['diagnostico'] = 0;}
 
 if($_POST['cambiar_mecanico'] == 1)
 {$_POST['mecanico'] = $_POST['mecanico_nuevo'];}
@@ -105,6 +106,7 @@ iva = '".$_POST['iva']."'
 ,saldo = '".$saldo_orden."' 
 ,documentos_recibidos = '".$_POST['documentos_recibidos']."'  
 ,fecha = '".$_POST['fecha']."'
+,diagnostico = '".$_POST['diagnostico']."'
 ";
 
 if($_POST['checkbox_pagada']==1)

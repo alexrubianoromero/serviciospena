@@ -17,7 +17,7 @@ $arreglo_iva = mysql_fetch_assoc($consulta_traer_iva);
 $iva_tabla_iva = $arreglo_iva['iva'];
 
 ////////////////cilo para colocar valores a loscampos que vienen indefinidos de nombres inventarios
-$sql_nombres_items_inventarios = "select * from $tabla24  where decarroomoto = '".$_POST['decarroomoto']."'   and id_empresa = '".$_SESSION['id_empresa']."' ";
+$sql_nombres_items_inventarios = "select * from $tabla24  where decarroomoto = '".$_POST['decarroomoto']."'   ";
 //echo '<br>'.$sql_nombres_items_inventarios.'<br>';
 $consulta_nombres_items = mysql_query($sql_nombres_items_inventarios,$conexion);
 $filas_nombres_items = mysql_num_rows($consulta_nombres_items);
@@ -37,13 +37,14 @@ if ($_POST['radio']== 'undefined'){$_POST['radio'] = 0;}
 if ($_POST['antena']== 'undefined'){$_POST['antena'] = 0;}
 if ($_POST['repuesto']== 'undefined'){$_POST['repuesto'] = 0;}
 if ($_POST['herramienta']== 'undefined'){$_POST['herramienta'] = 0;}
+if ($_POST['diagnostico']== 'undefined'){$_POST['diagnostico'] = 0;}
 
 /////////////////
 
 
 ///////////////
 
-$sql_maxima_remision  = "select contaor from $tabla10  where id_empresa = '".$_SESSION['id_empresa']."'  ";
+$sql_maxima_remision  = "select contaor from $tabla10  where 1=1 ";
          $maximoid = mysql_query($sql_maxima_remision,$conexion);
          $maximoid = mysql_fetch_assoc($maximoid);
 		 
@@ -52,14 +53,14 @@ $sql_maxima_remision  = "select contaor from $tabla10  where id_empresa = '".$_S
 
 
 ////////////////////////////////////////
-$sql_actualizar_contaor = "update $tabla10 set  contaor = '".$ordenpan."'  where   id_empresa = '".$_SESSION['id_empresa']."' "; 
+$sql_actualizar_contaor = "update $tabla10 set  contaor = '".$ordenpan."'  where  1=1 "; 
 $consulta = mysql_query($sql_actualizar_contaor,$conexion);
 //////////////////////////////////////
 //aqui se crea el registro de la orden 
 $sql_grabar_orden = "insert into $tabla14 
 (orden,placa,sigla,fecha,observaciones,radio,antena,repuesto,herramienta,otros,
 	iva,id_empresa,estado,kilometraje,mecanico,tipo_orden,kilometraje_cambio,fecha_entrega,notificacion
-	,gasolina,usuario_creacion,cotiza,documentos_recibidos,tipo_medida_kms_millas_horas) 
+	,gasolina,usuario_creacion,cotiza,documentos_recibidos,tipo_medida_kms_millas_horas,diagnostico) 
 values (
 '".$ordenpan."',
 '".$_POST['placa']."',
@@ -84,9 +85,10 @@ values (
 '".$_SESSION['id_usuario']."',
 '".$_POST['valor_estimado']."',
 '".$_POST['documentos_recibidos']."',
-'".$_POST['tipo_medida']."'
+'".$_POST['tipo_medida']."',
+'".$_POST['diagnostico']."'
 )";
-//echo '<br>'.$sql_grabar_orden.'<br>';
+// echo '<br>'.$sql_grabar_orden.'<br>';
 // el  que se graba en tipo_orden de ordenes indica que es una orden normal 
 //porque cuando se graba una venta ya se indica un tipo de orden 2 
 //esto para evitar confucion entre un numero de orden normal y un numero de orden de venta que se crea con el numero de factura
@@ -100,7 +102,7 @@ $consulta_grabar = mysql_query($sql_grabar_orden,$conexion);
 //ahora se debe actulizar el numero del consecutivo del campo contaor de  la tabla empresa 
 //ahora despues de grabar la orden con el consecutivo que se trae de empresa 
 ///se debe actualizar el numero del id de la orden para los items creados para que los items queden bien creados con el numero del id de la orden
-$sql_traer_id_orden = "select max(id) as id  from $tabla14 where placa = '".$_POST['placa']."'   and id_empresa = '".$_SESSION['id_empresa']."'  ";
+$sql_traer_id_orden = "select max(id) as id  from $tabla14 where placa = '".$_POST['placa']."'   ";
 //echo '<br>'.$sql_traer_id_orden;
 $consulta_id_orden = mysql_query($sql_traer_id_orden,$conexion);
 $id_orden = mysql_fetch_assoc($consulta_id_orden);
@@ -123,7 +125,7 @@ $consulta_actualizar_items = mysql_query($sql_actualizar_id_orden_item,$conexion
 ///////////////////////////////////////////////////////// TRANSLADAR ITEMS DE TEMPORAL A DEFINITIVO
 ////CONSULTA PARA TRAER LOS ITEMS DE TEMPORAL Y LUEGO CON UN CICLO LOS VAMOS GUARDANDO UNO A UNO EN LA UBICACION DEFINITIVA
 
-$sql_traer_items_temporal = "select * from $tabla18    where  no_factura =  '".$_POST['orden_numero']."'   and id_empresa = '".$_SESSION['id_empresa']."' order by id_item ";
+$sql_traer_items_temporal = "select * from $tabla18    where  no_factura =  '".$_POST['orden_numero']."'   order by id_item ";
 
 $consulta_temporal_definitivo = mysql_query($sql_traer_items_temporal,$conexion);
 while($items  =  mysql_fetch_array($consulta_temporal_definitivo))
@@ -133,7 +135,7 @@ while($items  =  mysql_fetch_array($consulta_temporal_definitivo))
 			$consulta_trasladar_item = mysql_query($sql_grabar_items,$conexion);
 			//falta actualizar los valores de inventario;
 			//tengo que traer el valor existente en la base 
-			$sql_valor_existente = "select codigo_producto,cantidad from $tabla12 where codigo_producto =  '".$items[2]."'   and id_empresa = '".$_SESSION['id_empresa']."'    ";	
+			$sql_valor_existente = "select codigo_producto,cantidad from $tabla12 where codigo_producto =  '".$items[2]."'      ";	
 			//echo '<br>'.$sql_valor_existente;
 			$consulta_valor_inventario = mysql_query($sql_valor_existente,$conexion); 
 			$valor_actual_inventario = mysql_fetch_assoc($consulta_valor_inventario);
@@ -152,7 +154,7 @@ $sql_grabar_items = " insert into $tabla15   (no_factura,codigo,descripcion,cant
 		
 ////////////////////////////////////////////////////////
 		///////////////////////hay que borrar la tabla temporal 
-		$sql_borrar_temporal = "delete from $tabla18 where id_empresa = '".$_SESSION['id_empresa']."' ";
+		$sql_borrar_temporal = "delete from $tabla18 where 1=1 ";
 		$consulta_borrar = mysql_query($sql_borrar_temporal,$conexion);
 
 		
@@ -161,10 +163,10 @@ $sql_grabar_items = " insert into $tabla15   (no_factura,codigo,descripcion,cant
 ////////traemos el numero de items adicionales de la empresa 
 /////revisamos los datos de la empresa 
 
-$sql_datos_empresa = "select ruta_imagen,nombre,tipo_taller,identi,telefonos,direccion from $tabla10 where id_empresa = '".$_SESSION['id_empresa']."'  ";  
+$sql_datos_empresa = "select ruta_imagen,nombre,tipo_taller,identi,telefonos,direccion from $tabla10 where 1=1  ";  
 $consulta_empresa = mysql_query($sql_datos_empresa,$conexion);
 $datos_empresa = mysql_fetch_assoc($consulta_empresa);
-$sql_nombres_items_inventarios = "select * from $tabla24  where decarroomoto = '".$datos_empresa['tipo_taller']."'   and id_empresa = '".$_SESSION['id_empresa']."' ";
+$sql_nombres_items_inventarios = "select * from $tabla24  where decarroomoto = '".$datos_empresa['tipo_taller']."'   ";
 //echo 'consulta<br>'.$sql_nombres_items_inventarios.'<br>';
 $consulta_nombres_items = mysql_query($sql_nombres_items_inventarios,$conexion);
 $filas_nombres_items = mysql_num_rows($consulta_nombres_items);

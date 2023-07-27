@@ -157,7 +157,7 @@ $filas = mysql_num_rows($consulta_facturas);
 
 
 
-$sql_operarios = "select idcliente,nombre from $tabla21 where id_empresa = '".$_SESSION['id_empresa']."' ";
+$sql_operarios = "select idcliente,nombre from $tabla21 where 1=1";
 
 $consulta_operarios =  mysql_query($sql_operarios,$conexion);
 
@@ -174,6 +174,7 @@ car.placa,car.marca,car.modelo,car.color,car.tipo,
  o.fecha,o.observaciones,o.radio,o.antena,o.repuesto,o.herramienta,o.otros,o.iva as iva ,o.orden,o.kilometraje,o.mecanico,o.id,documentos_recibidos
 
  ,e.identi,e.telefonos as telefonos_empresa ,e.direccion as direccion_empresa,o.kilometraje_cambio,e.tipo_taller,o.fecha_entrega,o.abono,o.estado 
+ ,o.diagnostico
 
 from $tabla4 as car
 
@@ -183,11 +184,11 @@ inner join $tabla14 as o  on (o.placa = car.placa)
 
 inner join $tabla10 as e on  (e.id_empresa = o.id_empresa) 
 
- where o.id = '".$_REQUEST['idorden']."'   and   o.id_empresa = '".$_SESSION['id_empresa']."'  and o.estado < 20 ";
+ where o.id = '".$_REQUEST['idorden']."'   and o.estado < 20 ";
 
  
 
- //echo '<br>'.$sql_placas;
+//  echo '<br>'.$sql_placas;
 
 $datos = mysql_query($sql_placas,$conexion);
 
@@ -275,7 +276,7 @@ exit();
 
 
 
-$sql_traer_estados = "select * from $tabla26 where id_empresa = '".$_SESSION['id_empresa']."'";
+$sql_traer_estados = "select * from $tabla26 where 1=1 ";
 
 //echo'<br>consulta'.$sql_traer_estados;
 
@@ -718,7 +719,23 @@ REFERENCIA
 
 	<tr>
 
-	<td>&nbsp;</td>
+	<td>
+		<div style="background-color:#C1E1EF;margin:5px;padding:5px;">
+			<label for="">Diagnostico:</label> 
+			<?php
+			// echo 'infodiag = '.$datos[0]['diagnostico'];
+				if($datos[0]['diagnostico']=='1')
+				{
+					echo '<input  type="checkbox" checked value="1" id="diagnostico" style="width:30px;height:20px;">	';
+				}
+				else{
+					echo '<input  type="checkbox" value="1" id="diagnostico" style="width:30px;height:20px;">	';
+
+				}
+			?>
+			
+		</div>
+	</td>
 
 	<?php 
 
@@ -1066,7 +1083,7 @@ function busque_estado($tabla26,$id_estado,$id_empresa,$conexion)
 
 	{
 
-	  $sql_estados= "select descripcion_estado from $tabla26 where valor_estado  =   '".$id_estado."'   and id_empresa = '".$id_empresa ."' ";
+	  $sql_estados= "select descripcion_estado from $tabla26 where valor_estado  =   '".$id_estado."'   ";
 
 	  $consulta_estados = mysql_query($sql_estados,$conexion);
 
@@ -1622,6 +1639,7 @@ function valida_envia(){
 	   data += '&iva=' + $("#iva").val();
 
 	   data += '&estado=' + $("#estado").val();
+	   data += '&diagnostico=' + $("#diagnostico:checked").val();
 
 	   $.post('actualizar_orden_honda.php',data,function(a){
 
@@ -1635,7 +1653,9 @@ function valida_envia(){
 
 	    });	
 
-	   $( "#divorden" ).load( "muestre_orden_sin_modif.php" );
+	//    $( "#divorden" ).load( "muestre_orden_sin_modif.php" );
+	 var mensaje = '<div align = "center"    style="color:green;font-size:20px;"><h2>INFORMACION ACTUALIZADA</h2>		</div>';
+	   document.getElementById("divorden").innerHTML  = mensaje;
 
 
 

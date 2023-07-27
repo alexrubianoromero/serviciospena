@@ -10,11 +10,13 @@ date_default_timezone_set('America/Bogota');
 
 <html lang="es"  class"no-js">
 
+
 <head>
 
 	<meta charset="UTF-8">
 
 	<title>orde captura </title>
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
 
     <link rel="stylesheet" href="../css/normalize.css">
 
@@ -309,8 +311,31 @@ include('../colocar_links2.php');
         <td>&nbsp;</td>
 
       </tr>
+	  <tr>
+		<td colspan="2" style="background-color:#3080EE; color:white;" align="center">
+			<span>DESCRIPCION-TRABAJOS POR REALIZAR </span>
+		</td>
+	  </tr>
+	  <tr>
+		<td >
+					<textarea name="descripcion"  id = "descripcion" cols="90" rows="4" class="fila_llenar" ></textarea>
+		</td>
+		<td style="background-color:#C1E1EF;margin:5px;padding:5px;">
+			<label style="font-size:30px;"for="diagnostico">Diagnostico:</label>
+					<input  type="checkbox" value="1" id="diagnostico" style="width:30px;height:30px;">	
+		</td>
+	  </tr>
+	<tr>
+		<td colspan="2">
+			<div >
+				<input class="btn btn-primary btn-block " type="button" id="btn_grabar" value="GRABAR ORDEN" onClick="valida_envia()">
+			</div>
 
+		</td>
+	</tr>
     </table>
+
+	
 
 	
 
@@ -320,37 +345,8 @@ include('../colocar_links2.php');
 
 
 
-	 <table border = "1" width = <?php echo $ancho_tabla; ?> >
 
-      <tr>
-
-        <td colspan="11"><div align="left">DESCRIPCION-TRABAJOS POR REALIZAR </div></td>
-
-      </tr>
-
-      <tr>
-
-        <td height="134" colspan="10"><label>
-
-          <textarea name="descripcion"  id = "descripcion" cols="90" rows="4" class="fila_llenar" ></textarea>
-
- 		</td>
-
-		</tr>
-
-		<tr>
-
-           <td>       
-
-			 <input type="button" id="btn_grabar" value="GRABAR ORDEN" onClick="valida_envia()" size ="75%">
-
-			</td>
-
-      </label>
-
-      </tr>
-
-    </table>
+	
 
 	<?php   echo  'Usuario: '.$_SESSION['nombre_usuario'];?>
 
@@ -767,6 +763,7 @@ function valida_envia(){
 	   data += '&mecanico=' + $("#mecanico").val();
 
 	   data += '&descripcion=' + $("#descripcion").val();
+	   data += '&diagnostico=' + $("#diagnostico:checked").val();
 
 	   
 
