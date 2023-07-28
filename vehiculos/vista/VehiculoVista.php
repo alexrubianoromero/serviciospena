@@ -2,14 +2,139 @@
 
 $raiz = dirname(dirname(dirname(__file__)));
 require_once($raiz.'/vista/vista.php');
+require_once($raiz.'/vehiculos/modelo/VehiculosModelo.php');
 
 class VehiculoVista extends vista
 {
+    protected $model;
+
+    public function __construct()
+    {
+        $this->model = new VehiculosModelo();
+    }
 
 
 
+    public function pregunteCambioPlaca()
+    {
+        ?>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+            <link rel="stylesheet" href="../css/bootstrap.min.css">
+        </head>
+        <body>
+        <div class="container">
+            <br>
+            <div class="row" style="font-size:20px;">
+                <div class="col-lg-6 ofset-4"  >
+                    CAMBIO DE PLACA 
+                </div>
+                <div class="col-lg-6">
+                    <label>Digite la placa Actual:</label>      
+                    <input type="text" id="placaActual" onkeyup="buscarPlacaParaCambio();" size="6">
+                </div>
+            </div>
+            <hr>
+           <div id="divResultadosPlacaCambio" style="font-size:20px;">
 
+           </div> 
+        </div>
+        <script>
+            function buscarPlacaParaCambio(){
 
+                var placa = document.getElementById("placaActual").value;
+                const http=new XMLHttpRequest();
+                const url = '../vehiculos/vehiculos.php';
+                http.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status ==200){
+                        console.log(this.responseText);
+                        document.getElementById("divResultadosPlacaCambio").innerHTML = this.responseText;
+                    }
+                };
+                http.open("POST",url);
+                http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                http.send("opcion=buscarPlacaParaCambio"+ "&placa="+placa);
+
+            }
+
+        </script>
+        </body>
+        </html>
+
+        <?php
+    }
+
+    public function muestreInfoPlacaCambio($infoPlaca)
+    {
+        $cliente = $this->model->traerPorpietarioVehiculoPorPlaca($infoPlaca['placa']);
+        ?>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+           
+        </head>
+        <body>
+            <div class="row">
+                <div class = "col-lg-4">
+                    <label for="">Placa:</label>
+                    <span><?php   echo $infoPlaca['placa']; ?></span>
+                </div>
+                <div class = "col-lg-4">
+                    <label for="">Marca:</label>
+                    <span><?php   echo $infoPlaca['marca']; ?></span>
+                </div>
+                <div class = "col-lg-4">
+                    <label for="">Modelo:</label>
+                    <span><?php   echo $infoPlaca['modelo']; ?></span>
+                </div>
+                <div class = "col-lg-4">
+                    <label for="">Propietario:</label>
+                    <span><?php   echo $cliente['nombre']; ?></span>
+                </div>
+                <div>
+                    <label for="">Cambiar por la placa </label>
+                    <input type="text" id="nuevaPlaca" size="6" style="background-color:aquamarine;">
+                </div>
+                <br>
+                <div align="center">
+                    <button class="btn btn-primary btn-lg" onclick="realizarCambioPlaca();" >Cambiar Placa</button>
+                </div>
+            </div>
+            <script>
+                function realizarCambioPlaca(){
+
+                    var placaActual = document.getElementById("placaActual").value;
+                    var nuevaPlaca = document.getElementById("nuevaPlaca").value;
+                    const http=new XMLHttpRequest();
+                    const url = '../vehiculos/vehiculos.php';
+                    http.onreadystatechange = function(){
+                        if(this.readyState == 4 && this.status ==200){
+                            console.log(this.responseText);
+                            document.getElementById("divResultadosPlacaCambio").innerHTML = this.responseText;
+                        }
+                    };
+                    http.open("POST",url);
+                    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    http.send("opcion=realizarCambioPlaca"
+                            + "&placaActual="+placaActual
+                            + "&nuevaPlaca="+nuevaPlaca
+                            );
+
+                    }
+            </script>
+        </body>
+        </html>
+        <?php
+    }
     public function pantallaCreacionVehiculo(){
 
         ?>

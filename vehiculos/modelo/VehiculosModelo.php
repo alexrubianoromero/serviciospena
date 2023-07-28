@@ -8,8 +8,32 @@ require_once($raiz.'/funciones/funciones.class.php');
 class VehiculosModelo extends Conexion
 {
 
+    public function realizarCambioPlaca($request)
+    {
+          $sql = "update carros set placa = '".$request['nuevaPlaca']."'  where  placa = '".$request['placaActual']."'  "; 
+          $consulta = mysql_query($sql,$this->connectMysql()); 
 
+    }
+    public function traerPorpietarioVehiculoPorPlaca($placa)
+    {
+        $sql = "select cli.nombre   from carros c 
+                          inner join cliente0 cli on (c.propietario = cli.idcliente)
+                          where c.placa = '".$placa."' ";
+        $consulta = mysql_query($sql,$this->connectMysql()); 
+        $cliente = mysql_fetch_assoc($consulta);
+        return $cliente; 
+        
+    }
 
+    public function buscarPlacaParaCambio($placa)
+    {
+        $sql = "select * from carros where placa = '".$placa."'    "; 
+        $consulta = mysql_query($sql,$this->connectMysql()); 
+        $filas = mysql_num_rows($consulta);
+        $info['filas'] = $filas;
+        $info['datos'] = mysql_fetch_assoc($consulta);
+        return $info;  
+    }
     public function verificarPlaca($conexion,$placa){
 
         $sql_verificar_placa = "SELECT  * FROM  carros WHERE placa = '".$placa."' ";

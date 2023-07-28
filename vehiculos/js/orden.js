@@ -1,5 +1,4 @@
 
-
 function valide(){
     placa = document.querySelector('#placa');
     const http=new XMLHttpRequest();

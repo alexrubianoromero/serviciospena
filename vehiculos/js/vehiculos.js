@@ -110,6 +110,10 @@ function buscarPlacaPeritaje(){
 
 
 
+
+
+
+
 function grabarVehiculo()
 
 {

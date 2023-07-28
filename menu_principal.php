@@ -320,3 +320,4 @@ background-color: #c0c0c0;
 
 <script src="menu.js"></script>  
 <script src="clientes/js/clientes.js"></script>  
+<script src="vehiculos/js/vehiculos.js"></script>  

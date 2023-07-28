@@ -93,7 +93,7 @@ echo '<table border= "1">';
 
 
 				$nombre_estado = busque_estado($tabla26,$ordenes[6],$_SESSION['id_empresa'],$conexion);
-				$sql_traer_tipo  = "select tipo from $tabla4 where placa='".$ordenes['2']."' and id_empresa = '".$_SESSION['id_empresa']."' ";
+				$sql_traer_tipo  = "select tipo from $tabla4 where placa='".$ordenes['2']."'  ";
 				$consulta_tipo = mysql_query($sql_traer_tipo,$conexion);
 				$linea_tipo = mysql_fetch_assoc($consulta_tipo);
 				$linea_tipo = $linea_tipo['tipo'];

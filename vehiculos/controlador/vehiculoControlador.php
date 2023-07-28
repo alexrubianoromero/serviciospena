@@ -104,14 +104,44 @@ class vehiculoControlador{
 
             $this->mostrarDatosPlacaNewCambioAceite($_REQUEST);
         } 
-        if($_REQUEST['opcion']=='preguntarDatosPlacaDesdeCambio'){
+        
+        if($_REQUEST['opcion']=='pregunteCambioPlaca'){
 
-            $this->preguntarDatosPlacaDesdeCambio($_REQUEST);
+            $this->pregunteCambioPlaca();
         } 
+        if($_REQUEST['opcion']=='realizarCambioPlaca'){
+
+            $this->realizarCambioPlaca($_REQUEST);
+        } 
+
+        
 
 
     }
 
+    public function realizarCambioPlaca($request)
+    {
+        $this->vehiculoModelo->realizarCambioPlaca($request);
+        echo '<br>Cambio Realizado'; 
+    }
+
+    public function pregunteCambioPlaca()
+    {
+       
+        $this->vehiculoVista->pregunteCambioPlaca();         
+    }
+    
+    public function buscarPlacaParaCambio($request)
+    {
+        $busquePlaca =  $this->vehiculoModelo->buscarPlacaParaCambio($request['placa']); 
+        if($busquePlaca['filas']==0)
+        {
+            echo 'Placa no exisxte'; 
+        }
+        else {
+            $this->vehiculoVista->muestreInfoPlacaCambio($busquePlaca['datos']);         
+        }
+    }
 
 
     public function verificarPlacaRespuestaJson($conexion,$placa){
