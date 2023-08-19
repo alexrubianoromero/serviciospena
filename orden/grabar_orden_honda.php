@@ -281,7 +281,7 @@ Placa: '.$_POST['placa'].' Orden No : '.$ordenpan.' <br>
 TRABAJO A REALIZAR : '.$_POST['descripcion'].' <br>
 
 SERVICIOS PENA<br>
-Telefonos:   <br>
+Telefonos:  3108740034, 3163089233 <br>
 E-mails:  serviciospena.sas@gmail.com ,serviciospena@hotmail.com<br>
 Direccion:  Cll 70C No 57-24 Bogota '; 
 

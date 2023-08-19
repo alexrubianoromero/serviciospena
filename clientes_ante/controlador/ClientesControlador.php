@@ -101,20 +101,6 @@ class ClientesControlador{
             if($_REQUEST['opcion']=='buscarPorFiltros'){
                 $this->buscarPorFiltros($_REQUEST);
             }
-            if($_REQUEST['opcion']=='mostrarInfoCLiente'){
-
-                $this->mostrarInfoCLiente($_REQUEST);
-            }
-            if($_REQUEST['opcion']=='modificarClienteNew'){
-
-                $this->modificarClienteNew($_REQUEST);
-            }
-            if($_REQUEST['opcion']=='filtrarPropietariosNombreDesdeVehiculo'){
-                $this->filtrarPropietariosNombreDesdeVehiculo($_REQUEST);
-            }
-            
-
-
 
 
             
@@ -218,32 +204,9 @@ class ClientesControlador{
                     // die();
         $clientes = $this->modelo->buscarClientePorFiltros($request);
         $this->vista->verClientes($clientes);
-        
+
     }
     
-    public function mostrarInfoCLiente($request)
-    {
-
-        $cliente = $this->modelo->traerDatosClienteIdNew($request['id']);
-        // die('llego a controlador') ;
-            $this->vista->mostrarInfoCLiente($cliente);
-    }
-    public function modificarClienteNew($request)
-    {
-            $this->modelo->modificarClienteNew($request);
-            echo 'CLiente Actualizado'; 
-            
-        }
-        public function filtrarPropietariosNombreDesdeVehiculo($request)
-        {
-           $clientes = $this->modelo->filtrarPropietariosNombre($request['nombreCliente']);
-           echo '<option value="">Seleccione..</option>';
-           foreach($clientes as $cliente)
-           {
-                echo '<option value="'.$cliente['idcliente'].'">'.$cliente['nombre'].'</option>';
-           }
-            
-        }
 }
 
 

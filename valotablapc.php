@@ -42,10 +42,7 @@ $empresas_externas = "empresas_externas";
 
 
 
-$servidor = "localhost";
-$usuario = "ctwtvsxj_admin";
-$clave  = "ElMejorProgramador***";
-$nombrebase = "ctwtvsxj_base_serviciospenapruebas";
+
 
 
 $conexion =mysql_connect($servidor,$usuario,$clave);

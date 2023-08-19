@@ -74,3 +74,10 @@
 [24-Mar-2023 16:36:01 UTC] PHP Warning:  number_format() expects parameter 1 to be double, string given in /home/ctwtvsxj/public_html/demo2/informes/informe_ventas_por_fecha.php on line 79
 [03-Apr-2023 21:05:03 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/ctwtvsxj/public_html/serviciospena/valotablapc.php on line 51
 [03-Apr-2023 21:05:04 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/ctwtvsxj/public_html/serviciospena/valotablapc.php on line 51
+[29-Jul-2023 21:07:10 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/ctwtvsxj/public_html/serviciospena/valotablapc.php on line 51
+[29-Jul-2023 21:07:10 UTC] PHP Warning:  number_format() expects parameter 1 to be double, string given in /home/ctwtvsxj/public_html/serviciospena/informes/informe_ventas_por_fecha.php on line 78
+[29-Jul-2023 21:07:10 UTC] PHP Warning:  number_format() expects parameter 1 to be double, string given in /home/ctwtvsxj/public_html/serviciospena/informes/informe_ventas_por_fecha.php on line 79
+[29-Jul-2023 21:07:10 UTC] PHP Warning:  number_format() expects parameter 1 to be double, string given in /home/ctwtvsxj/public_html/serviciospena/informes/informe_ventas_por_fecha.php on line 78
+[29-Jul-2023 21:07:10 UTC] PHP Warning:  number_format() expects parameter 1 to be double, string given in /home/ctwtvsxj/public_html/serviciospena/informes/informe_ventas_por_fecha.php on line 79
+[29-Jul-2023 21:07:10 UTC] PHP Warning:  number_format() expects parameter 1 to be double, string given in /home/ctwtvsxj/public_html/serviciospena/informes/informe_ventas_por_fecha.php on line 78
+[29-Jul-2023 21:07:10 UTC] PHP Warning:  number_format() expects parameter 1 to be double, string given in /home/ctwtvsxj/public_html/serviciospena/informes/informe_ventas_por_fecha.php on line 79
