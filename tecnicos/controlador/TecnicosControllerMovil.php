@@ -13,7 +13,7 @@ class  TecnicosControllerMovil
         $this->vista = new TecnicosVista(); 
         $this->model = new TecnicosModelo();
 
-        if($_REQUEST['opcion']=='pantallaPrincipalTecnicos'){
+        if(!isset($_REQUEST['opcion']) ||  $_REQUEST['opcion']=='pantallaPrincipalTecnicos'){
             $this->pantallaPrincipalTecnicos(); 
         }
         if($_REQUEST['opcion']=='editarTecnico'){
