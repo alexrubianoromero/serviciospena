@@ -4,7 +4,7 @@ include('../valotablapc.php');
 include('../funciones.php');
 
 $sql_clientes = "select nombre,telefono,email,direccion,observaci,idcliente 
-from $tabla21 as cli  where  cli.id_empresa = '".$_SESSION['id_empresa']."'   ";
+from $tabla21 as cli  where  1=1   ";
 
 
 

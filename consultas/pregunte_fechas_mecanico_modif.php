@@ -29,6 +29,7 @@ $consulta_operarios =  mysql_query($sql_operarios,$conexion);
 <br>
 
   <div id = "datos">
+	*El sistema realizara los calculos con base en las fechas de los items no de las ordenes.
  <table width="95%" border="1">
   <tr>
     <td>&nbsp;</td>
@@ -112,7 +113,7 @@ include('../colocar_links2.php');
 							data += '&fechafin=' + $("#fechafin").val();
 							data += '&mecanico=' + $("#mecanico").val();
 							data += '&modo=' + $("#modo").val();
-							$.post('muestre_nomina_entre_fechas.php',data,function(a){
+							$.post('muestre_nomina_entre_fechas_item_orden.php',data,function(a){
 							//$(window).attr('location', '../index.php);
 							$("#datos").html(a);
 								//alert(data);

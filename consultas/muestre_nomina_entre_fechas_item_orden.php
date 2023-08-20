@@ -19,13 +19,25 @@ echo '<input type = "hidden" id="modo" name = "modo"  value = "'.$_REQUEST['modo
 /*
 $sql_ordenes = "select mecanico from $tabla14 where fecha between '".$_REQUEST['fechain']."'   and   '".$_REQUEST['fechafin']."'   and id_empresa = '".$_SESSION['id_empresa']."' and anulado = '0'  group by mecanico  ";
 */
-$sql_ordenes = "select mecanico from $tabla14 
-where fecha between '".$_REQUEST['fechain']."'   
-and   '".$_REQUEST['fechafin']."'   
-and anulado = '0'
-and estado >'1' 
-  group by mecanico  ";
-//   die($sql_ordenes); 
+// $sql_ordenes = "select mecanico from $tabla14 
+// where fecha between '".$_REQUEST['fechain']."'   
+// and   '".$_REQUEST['fechafin']."'   
+// and anulado = '0'
+// and o.estado >'1' 
+//   group by mecanico  ";
+
+
+
+$sql_ordenes_mecanico_item = "select  i.id_mecanico from ordenes o
+                             inner join item_orden i on (i.no_factura = o.id)
+                             where o.fecha between '".$_REQUEST['fechain']."'   
+                             and   '".$_REQUEST['fechafin']."'   
+                             and o.anulado = '0'
+                             and i.anulado = '0'
+                             group by i.id_mecanico
+                             "; 
+                               
+//   die($sql_ordenes_mecanico_item); 
 //estado > 1 significa entregada
 //echo 'consulta<br>'.$sql_ordenes.'<br>';
 /*
@@ -44,30 +56,46 @@ echo '<div id="muestre_resumen">';
 echo '<h3>RESUMEN NOMINA DEL '.$_REQUEST['fechain'].'  AL '.$_REQUEST['fechafin'].'</h3> ';
 
  $gran_total = 0;
-$consulta_ordenes_fecha = mysql_query($sql_ordenes,$conexion);
- 
-while($mecanicos = mysql_fetch_assoc($consulta_ordenes_fecha))
-	{
+
+// $consulta_ordenes_fecha = mysql_query($sql_ordenes,$conexion);
+$consulta_ordenes_fecha = mysql_query($sql_ordenes_mecanico_item,$conexion);
+
+function traerInfoMecanico($id,$conexion)
+{
+    $sql = "select * from mecanicos where idcliente = '.$id.'    ";
+    $consultaMecanico = mysql_query($sql,$conexion); 
+    $infoMecanico = get_table_assoc($consultaMecanico);
+    return $infoMecanico;
+}
+
+while($items = mysql_fetch_assoc($consulta_ordenes_fecha))
+{
 	  
-	   if($mecanicos['mecanico']<>'')
+	   if($items['id_mecanico']<>'')
 		{
+        $infoMecanico = traerInfoMecanico($items['id_mecanico'],$conexion);   
+        $porcentaje_mecanico = porcentaje_mecanico($conexion,$tabla21,$items['id_mecanico']);
+        // echo '<pre>'; 
+        // print_r($infoMecanico);
+        // echo '</pre>';
+        // die();
 	   echo '<table border = "1" width = "90%"> ';
-//echo '<tr><td></td><td>NOMBRE MECANICO</td><td>VALOR MANOS DE OBRA </td></tr>';
+        //echo '<tr><td></td><td>NOMBRE MECANICO</td><td>VALOR MANOS DE OBRA </td></tr>';
 	   //tener en cuenta si esta en blanco el nombre del macanico 
 	   //echo '<br>'.$mecanicos['mecanico'];
-	   $traer_nombre_mecanico = "select nombre from $tabla21  
-	   where  id_empresa = '".$_SESSION['id_empresa']."'  
-	   and idcliente = '".$mecanicos['mecanico']."' ";
+	   $traer_nombre_mecanico = "select nombre from tecnicos
+	   where  1=1 
+	   and idcliente = '".$items['id_mecanico']."' ";
 	   //echo '<br>consulta nombre mecanico<br>'.$traer_nombre_mecanico.'<br>';
 	   $nombre_mecanico = mysql_query($traer_nombre_mecanico,$conexion);
 	   $nombre_mecanico  = mysql_fetch_assoc($nombre_mecanico); 
 	   $nombre_mecanico =$nombre_mecanico['nombre'];
-	   $porcentaje =  porcentaje_mecanico($conexion,$tabla21,$mecanicos['mecanico']);
+	   $porcentaje =  porcentaje_mecanico($conexion,$tabla21,$items['id_mecanico']);
 	   
 	     echo '<tr>';
 	   echo '<td width ="20%">TECNICO</td>'; 
 	   
-	   if($mecanicos['mecanico']=='')
+	   if($items['id_mecanico']=='')
 	   		{
 			echo '<td width ="40%">MECANICO NO ASIGNADO</td>'; 
 			}
@@ -78,24 +106,66 @@ while($mecanicos = mysql_fetch_assoc($consulta_ordenes_fecha))
 	   	 echo '<td>PAGO</td>';	
 		 echo '<td WIDTH = "40%" align = "center"> VALOR MANO DE OBRA</td>';	
 		  echo '<td  align = "center" WIDTH = "20%"> Vr._%</td>';	
-		 echo '<td WIDTH = "40%" align = "center">  VALOR A PAGAR </td>';
+		 echo '<td WIDTH = "40%" align = "center">  VALOR_A_PAGAR </td>';
 	    echo '</tr>';
+
+
+
 	   ///////// calculo de manos de obra 
 	   //////// buscar todas las ordenes dentro de esas fechas asignadas al mencanico y revisar cada item de esa orden y traer los que sean de codigo de nomina
 	   ////////traer los id de las ordenes de ese mecanico 
-	   $sql_id_ordenes_mecanico = "select orden,id,placa  from $tabla14 
+	   $sql_id_ordenes_mecanico = "select orden,id,placa  from ordenes 
 	   where fecha between '".$_REQUEST['fechain']."'  
 	   and   '".$_REQUEST['fechafin']."'    
-	   and id_empresa = '".$_SESSION['id_empresa']."' 
-	   and anulado = '0'  and mecanico = '".$mecanicos['mecanico']."' ";
+	   and anulado = '0'  and mecanico = '".$items['mecanico']."' ";
 	   //echo '<br>consulta_mecanicos'.$sql_id_ordenes_mecanico;
 	   $consulta_id_ordenes = mysql_query($sql_id_ordenes_mecanico,$conexion);
 	   $suma_parcial_items = 0;
+        ///////////////////////////
+        
+        //traigeme todos los items donde este este mecanico dentro de las fechas indicadas 
+        
+        $sql_traer_items_mecanico_entre_fechas = "select * from ordenes o 
+        inner join item_orden i on (i.no_factura = o.id)
+        where 1=1
+        and (i.fecha >= '".$_REQUEST['fechain']."' 
+        and  i.fecha <= '".$_REQUEST['fechafin']."'  )  
+        and i.id_mecanico = '".$items['id_mecanico']."'
+        and i.anulado = 0
+        and o.anulado = 0
+        ";
+        $consulta_items_mecanico = mysql_query($sql_traer_items_mecanico_entre_fechas,$conexion);       
+        $arregloItems = get_table_assoc($consulta_items_mecanico);
+        foreach($arregloItems as $item)
+        {
+            $valromecanico = calcularValorMecanico($porcentaje_mecanico,$item['total_item']);
+            echo '<tr>'; 
+            echo '<td>'.$item['fecha'].'</td>';
+            echo '<td>'.$item['descripcion'].'</td>';
+            echo '<td></td>';
+            echo '<td align="right">'.number_format($item['total_item'], 0, ',', '.').'</td>';
+            echo '<td align="right">'.$porcentaje_mecanico.'</td>';
+            echo '<td align="right">'.number_format($valromecanico, 0, ',', '.').'</td>';
+            echo '</tr>';
+            $sumaValorMecanico  = $sumaValorMecanico + $valromecanico; 
+        }             
+        echo '<tr>'; 
+        echo '<td></td>';               
+        echo '<td></td>';               
+        echo '<td></td>';               
+        echo '<td></td>';               
+        echo '<td></td>';               
+        echo '<td align="right">'.number_format($sumaValorMecanico, 0, ',', '.').'</td>';               
+        echo '</tr>';
+        echo '</table>';  
+        
 
-	   
+        
+        
+        // die($sql_traer_items_mecanico_entre_fechas); 
 	   ////////////////////////////////////////////////
 	   while($id_ordenes = mysql_fetch_assoc($consulta_id_ordenes))
-	   {
+	{
 	       
 		   
 		   ///  ahora se debe sumar los items que ssean de nomina de acuerdo al id de la orden 
@@ -130,11 +200,11 @@ while($mecanicos = mysql_fetch_assoc($consulta_ordenes_fecha))
 		    
 
 
-/*
+        /*
 		   echo '<td width = "40%">
 		   <a href="../orden/orden_imprimir_honda_cero.php?idorden='.$id_ordenes['id'].'"  target = "_blank">'.$id_ordenes['orden'].'</a>
 		   '.' placa '.$id_ordenes['placa'].' linea '.$tipo_moto.'</td>';
-*/
+        */
 		   //si ya esta pago  no muestra nada 
 		   // pero si no esta pagao muestra la casilla para indicar que esta pago 
 		   if($pagado <1 ) //osea si se debe
@@ -155,6 +225,9 @@ while($mecanicos = mysql_fetch_assoc($consulta_ordenes_fecha))
 		   }//fin de if($suma_item_nomina['suma']>0)
 
 		 	$suma_parcial_items = $suma_parcial_items +  $suma_item_nomina;
+
+            $sumaTotalNomina = $sumaTotalNomina + $sumaValorMecanico;
+            echo $suma_item_nomina;
 		 	
 		   
 		 			
@@ -164,26 +237,26 @@ while($mecanicos = mysql_fetch_assoc($consulta_ordenes_fecha))
 	   /////////////////////////////////////////////////////////////
 	   } //fin de si el mecanico esta en blanco 
 	   		echo '<tr>';
-			echo '<td width = "10%"></td><td width = "40%">TOTAL</td><td></td><td  align= "right" width ="40%">'.number_format($suma_parcial_items, 0, ',', '.').'</td>';
-			echo '<td align= "center"  >'.$porcentaje.'</td>';
+			echo '<td width = "10%"></td><td width = "40%"></td><td></td><td  align= "right" width ="40%">'.number_format('', 0, ',', '.').'</td>';
+			// echo '<td align= "center"  >'.$porcentaje.'</td>';
 			$suma_parcial_porcentajes  = ($suma_parcial_items *  $porcentaje)/100;
-			echo '<td  align= "right" width ="40%">'.number_format($suma_parcial_porcentajes, 0, ',', '.').'</td>';
+			// echo '<td  align= "right" width ="40%">'.number_format($suma_parcial_porcentajes, 0, ',', '.').'</td>';
 			
 			echo '</tr>';
-	 $gran_total =  $gran_total + $suma_parcial_items;
-	 $gran_total_porcentajes = $gran_total_porcentajes + $suma_parcial_porcentajes;
-echo '</table>';
+	    $gran_total =  $gran_total + $suma_parcial_items;
+	    $gran_total_porcentajes = $gran_total_porcentajes + $suma_parcial_porcentajes;
+        echo '</table>';
 	
 	   echo '<br><br>'; 
-	}// fin del ciclo de los nombres encontrados en las ordenes 
-echo '<table border = "1" width = "90%"> ';
-echo '<tr>';
-echo '<td>GRAN TOTAL MANOS DE OBRA </td><td  align= "right">'.number_format($gran_total, 0, ',', '.').'</td>';
-echo '<td width="15%"></td>';
-echo '<td>TOTAL PORCENTAJES A PAGAR</td>';
-echo '<td  align= "right">'.number_format($gran_total_porcentajes, 0, ',', '.').'</td>';
-echo '</tr>';
-echo '</table>';
+    }// fin del ciclo de los nombres encontrados en las ordenes 
+// echo '<table border = "1" width = "90%"> ';
+// echo '<tr>';
+// echo '<td>GRAN TOTAL MANOS DE OBRA </td><td  align= "right">'.number_format($sumaTotalNomina, 0, ',', '.').'</td>';
+// echo '<td width="15%"></td>';
+// echo '<td>TOTAL PORCENTAJES A PAGAR</td>';
+// echo '<td  align= "right">'.number_format($gran_total_porcentajes, 0, ',', '.').'</td>';
+// echo '</tr>';
+// echo '</table>';
 
 echo '</div>';
 
@@ -197,6 +270,11 @@ echo '</div>';
 		}// fin de 
 
 */
+function calcularValorMecanico($porcentaje,$valor)
+{
+     $result = ($valor*$porcentaje)/100;
+     return $result; 
+}
 
 function traer_tipo_moto($tabla4,$placa,$conexion,$id_empresa)
 	{
@@ -208,7 +286,7 @@ function traer_tipo_moto($tabla4,$placa,$conexion,$id_empresa)
 		return $tipo;
 	}
 function porcentaje_mecanico($conexion,$tabla21,$id_mecanico){
-	$sql_porcentaje ="select porcentaje_nomina from $tabla21 where idcliente = '".$id_mecanico."' ";
+	$sql_porcentaje ="select porcentaje_nomina from tecnicos where idcliente = '".$id_mecanico."' ";
 	$consulta_porcen = mysql_query($sql_porcentaje,$conexion);
 	$arreglo_porcen = mysql_fetch_assoc($consulta_porcen);
 	return $arreglo_porcen['porcentaje_nomina'];

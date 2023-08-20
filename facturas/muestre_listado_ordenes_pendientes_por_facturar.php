@@ -23,7 +23,7 @@ echo '</pre>';
 include('../colocar_links2.php');
 include('../valotablapc.php');
 //el estado 0 en las ordenes significa que esta sin facturar cuando se factura se  coloca un 1
-$sql_listado_ordenes = "select id,fecha,orden from $tabla14 where placa = '".$_POST['placa123']."' and id_empresa = '".$_SESSION['id_empresa']."' and estado < '20' and anulado ='0' ";
+$sql_listado_ordenes = "select id,fecha,orden from $tabla14 where placa = '".$_POST['placa123']."'  and estado < '20' and anulado ='0' ";
 //echo '<br>ordenes<br>'.$sql_listado_ordenes;
 $consulta_ordenes = mysql_query($sql_listado_ordenes,$conexion);
 echo '<H2>ORDENES SIN FACTURA PLACA   </H2'.'<h2>'.$_POST['placa123'].'</h2>';

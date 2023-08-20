@@ -36,7 +36,7 @@ from $tabla4 as car
 inner join $tabla3 as cli on (cli.idcliente = car.propietario)
 inner join $tabla14 as o  on (o.placa = car.placa) 
 inner join $tabla10 as e on  (e.id_empresa = o.id_empresa) 
- where o.id = '".$_REQUEST['idorden']."'   and   o.id_empresa = '".$_SESSION['id_empresa']."'  and o.estado < '20' ";
+ where o.id = '".$_REQUEST['idorden']."'   and o.estado < '20' ";
  
  //echo '<br>'.$sql_placas;
 $datos = mysql_query($sql_placas,$conexion);
